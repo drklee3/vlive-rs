@@ -13,10 +13,14 @@ impl ChannelList {
         self.0
             .iter()
             .find(|chan|{
-                chan.name.to_lowercase() == search
-                    .as_ref()
-                    .to_string()
-                    .to_lowercase()
+                if let Some(ref name) = chan.name {
+                    name.to_lowercase() == search
+                        .as_ref()
+                        .to_string()
+                        .to_lowercase()
+                } else {
+                    false
+                }
             })
             .cloned()
     }
@@ -24,12 +28,12 @@ impl ChannelList {
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct ChannelListItem {
-    pub name: String,           // "BTS",
-	pub icon: String,           // "http://v.phinf.naver.net/20180406_39/1522940433294kxJHw_PNG/profile13_15775.png?type=round58_58",
+    pub name: Option<String>,           // "BTS",
+	pub icon: Option<String>,           // "http://v.phinf.naver.net/20180406_39/1522940433294kxJHw_PNG/profile13_15775.png?type=round58_58",
 	
     #[serde(rename = "type")]
-    pub channel_type: ChannelType,      // "BASIC",
-	pub code: String,           // "FE619"
+    pub channel_type: Option<ChannelType>,      // "BASIC",
+	pub code: Option<String>,           // "FE619"
 }
 
 #[derive(Serialize, Deserialize, Debug)]

@@ -24,7 +24,7 @@ fn test_get_channel_list() {
         let channel = resp.and_then(|x| x.findChannel("bts")).unwrap();
 
         println!("Found Channel: {:?}", &channel);
-        assert!(channel.code == "FE619");
+        assert!(channel.code == Some("FE619".into()));
         Ok(())
     }).or_else(|err| {
         eprintln!("Error: {}", err);
