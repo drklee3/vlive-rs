@@ -1,0 +1,14 @@
+[package]
+name = "vlive-rs"
+version = "0.1.0"
+authors = ["drklee3 <dlee3@scu.edu>"]
+
+[dependencies]
+serde = "^1.0"
+serde_derive = "^1.0"
+serde_json = "^1.0"
+hyper = "^0.11"
+futures = "^0.1"
+
+[dev-dependencies]
+tokio-core = "~0.1"
