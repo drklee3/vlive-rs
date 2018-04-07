@@ -21,9 +21,10 @@ fn test_get_channel_list() {
     let client = client(&core.handle());
 
     let done = client.get_channel_list().and_then(|resp| {
-        println!("Response: {:?}", resp);
-        assert!(resp.is_some());
+        let channel = resp.and_then(|x| x.findChannel("bts")).unwrap();
 
+        println!("Found Channel: {:?}", &channel);
+        assert!(channel.code == "FE619");
         Ok(())
     }).or_else(|err| {
         eprintln!("Error: {}", err);

@@ -1,10 +1,28 @@
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum ChannelType {
     BASIC,
     PREMIUM,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+pub struct ChannelList(pub Vec<ChannelListItem>);
+
+impl ChannelList {
+    /// Searches for a channel by name.  This is case insensitive.
+    pub fn findChannel<T: AsRef<str>>(&self, search: T) -> Option<ChannelListItem> {
+        self.0
+            .iter()
+            .find(|chan|{
+                chan.name.to_lowercase() == search
+                    .as_ref()
+                    .to_string()
+                    .to_lowercase()
+            })
+            .cloned()
+    }
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct ChannelListItem {
     pub name: String,           // "BTS",
 	pub icon: String,           // "http://v.phinf.naver.net/20180406_39/1522940433294kxJHw_PNG/profile13_15775.png?type=round58_58",
