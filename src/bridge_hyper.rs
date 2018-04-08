@@ -91,9 +91,12 @@ pub fn decode_channel_code<B, C, T> (client: &Client<C, B>, channel_code: T)
         .and_then(|body| 
             serde_json::from_slice::<serde_json::Value>(&body)
                 .map_err(From::from)
-                .map(|d| d.pointer("/result/channelSeq").unwrap().as_u64().unwrap())
+                .map(|d| d
+                    .pointer("/result/channelSeq")
+                    .map(|d| d.as_u64())
+                    .unwrap_or(None)
+                )
         )
-        .map(|resp| Some(resp))
     )
 }
 
