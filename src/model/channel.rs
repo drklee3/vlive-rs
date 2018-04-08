@@ -1,53 +1,55 @@
-#[derive(Serialize, Deserialize, Clone, Debug)]
+use chrono::{
+    DateTime,
+    offset::FixedOffset,
+};
+use model::helpers::*;
+
+#[derive(Deserialize, Clone, Debug)]
 pub enum ChannelType {
     BASIC,
     PREMIUM,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 pub struct ChannelList(pub Vec<ChannelListItem>);
 
 impl ChannelList {
     /// Searches for a channel by name.  This is case insensitive.
-    pub fn findChannel<T: AsRef<str>>(&self, search: T) -> Option<ChannelListItem> {
+    pub fn find_channel<T: AsRef<str>>(&self, search: T) -> Option<ChannelListItem> {
         self.0
             .iter()
             .find(|chan|{
-                if let Some(ref name) = chan.name {
-                    name.to_lowercase() == search
+                chan.name.to_lowercase() == search
                         .as_ref()
                         .to_string()
                         .to_lowercase()
-                } else {
-                    false
-                }
             })
             .cloned()
     }
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Deserialize, Clone, Debug)]
 pub struct ChannelListItem {
-    pub name: Option<String>,           // "BTS",
-	pub icon: Option<String>,           // "http://v.phinf.naver.net/20180406_39/1522940433294kxJHw_PNG/profile13_15775.png?type=round58_58",
+    pub name: String,           // "BTS",
+	pub icon: String,           // "http://v.phinf.naver.net/20180406_39/1522940433294kxJHw_PNG/profile13_15775.png?type=round58_58",
 	
     #[serde(rename = "type")]
-    pub channel_type: Option<ChannelType>,      // "BASIC",
+    pub channel_type: ChannelType,      // "BASIC",
 	pub code: Option<String>,           // "FE619"
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 pub struct VStore {
     pub vstore_seq: u32,
     pub vstore_home_link: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 pub struct Board {
     pub board_id: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 pub struct Channel {
     pub channel_seq: u32,
     pub channel_code: String,
@@ -68,7 +70,7 @@ pub struct Channel {
     pub fan_board: Board,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ChannelInfo {
     pub channel_seq: u32,
@@ -85,12 +87,16 @@ pub struct ChannelInfo {
     pub prohibited_word_like: String,
     pub prohibited_word_exact: String,
     pub sns_share_img: String,
+
+    #[serde(deserialize_with = "bool_from_str")]
     pub banner_show_yn: bool,             //  "N"
     pub qrcode: String,
+
+    #[serde(deserialize_with = "bool_from_str")]
     pub upcoming_show_yn: bool,           //  "N"
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct VideoListItem {
     pub video_seq: u32,                      //  57788
@@ -102,11 +108,22 @@ pub struct VideoListItem {
     pub thumbnail: String,                   //  "http://v.phinf.naver.net…6_20.%BD%BA%C6%BF002.jpg"
     pub pick_sort_order: u32,                //  0
     pub screen_orientation: String,          //  "HORIZONTAL"
-    pub will_start_at: String,               //  "2018-02-01 20:39:00"
-    pub will_end_at: String,                 //  "2099-12-31 23:59:59"
-    pub created_at: Option<String>,          //  "2018-04-06 13:35:09"
+
+    #[serde(deserialize_with = "timestamp_from_str")]
+    pub will_start_at: DateTime<FixedOffset>,               //  "2018-02-01 20:39:00"
+
+    #[serde(deserialize_with = "timestamp_from_str")]
+    pub will_end_at: DateTime<FixedOffset>,                 //  "2099-12-31 23:59:59"
+    
+    #[serde(default)]
+    #[serde(deserialize_with = "option_timestamp_from_str")]
+    pub created_at: Option<DateTime<FixedOffset>>,          //  "2018-04-06 13:35:09"
     pub upcoming_yn: String,                 //  "N"
+
+    #[serde(deserialize_with = "bool_from_str")]
     pub special_live_yn: bool,               //  "N"
+
+    #[serde(deserialize_with = "bool_from_str")]
     pub live_thumb_yn: bool,                 //  "N"
     pub product_id: String,                  //  ""
     pub package_product_id: String,          //  ""
@@ -117,17 +134,22 @@ pub struct VideoListItem {
     pub on_air_start_at: String,             //  "2018-02-01 20:44:00"
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ChannelUpcomingVideoList {
     pub total_video_count: u32,
     pub video_list: Vec<VideoListItem>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ChannelVideoList {
     pub channel_info: ChannelInfo,
-    pub total_video_count: u32,           //  724
+    pub total_video_count: Option<u32>,           //  724
     pub video_list: Vec<VideoListItem>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct ChannelVideoListResult {
+    pub result: ChannelVideoList,
 }

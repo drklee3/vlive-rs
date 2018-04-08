@@ -21,7 +21,7 @@ fn test_get_channel_list() {
     let client = client(&core.handle());
 
     let done = client.get_channel_list().and_then(|resp| {
-        let channel = resp.and_then(|x| x.findChannel("bts")).unwrap();
+        let channel = resp.and_then(|x| x.find_channel("bts")).unwrap();
 
         println!("Found Channel: {:?}", &channel);
         assert!(channel.code == Some("FE619".into()));
@@ -36,3 +36,26 @@ fn test_get_channel_list() {
     core.run(done).expect("core err");
 }
 
+#[test]
+fn test_get_channel_video_list() {
+    let mut core = Core::new().unwrap();
+    let client = client(&core.handle());
+
+    let done = client.get_channel_video_list(364, 30, 1).and_then(|resp| {
+        let channel_video_list = resp.unwrap();
+        let channel_name = channel_video_list.channel_info.channel_name;
+        let video_count = channel_video_list.total_video_count.unwrap();
+
+        println!("Found Channel: {}, {} videos", 
+            channel_name, video_count);
+        assert!(channel_name == "BTS+");
+        Ok(())
+    }).or_else(|err| {
+        eprintln!("Error: {}", err);
+        assert!(false);
+
+        Err(())
+    });
+
+    core.run(done).expect("core err");
+}
