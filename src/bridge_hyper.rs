@@ -102,8 +102,8 @@ pub fn get_channel_video_list<B, C> (client: &Client<C, B>, channel_seq: u32, ma
         where C: Connect,
               B: Stream<Error = HyperError> + 'static,
               B::Item: AsRef<[u8]> {
-    let url = format!("http://api.vfan.vlive.tv/vproxy/channelplus/getChannelVideoList?app_id={}&channelSeq={}&maxNumOfRows={}&pageNo={}",
-        APP_ID, channel_seq, max_rows, page_no,
+    let url = format!("{}getChannelVideoList?app_id={}&channelSeq={}&maxNumOfRows={}&pageNo={}",
+        BASE_URL, APP_ID, channel_seq, max_rows, page_no,
     );
     let uri = match Uri::from_str(&url) {
         Ok(v) => v,
