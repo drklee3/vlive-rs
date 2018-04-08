@@ -137,15 +137,22 @@ pub struct VideoListItem {
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ChannelUpcomingVideoList {
+    /// Count of upcoming videos.
     pub total_video_count: u32,
-    pub video_list: Vec<VideoListItem>,
+    /// Upcoming video list, this will be None when there are no upcoming videos.
+    pub video_list: Option<Vec<VideoListItem>>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct ChannelUpcomingVideoListResult {
+    pub result: ChannelUpcomingVideoList,
 }
 
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ChannelVideoList {
     pub channel_info: ChannelInfo,
-    pub total_video_count: Option<u32>,           //  724
+    pub total_video_count: u32,           //  724
     pub video_list: Vec<VideoListItem>,
 }
 

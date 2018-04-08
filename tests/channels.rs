@@ -44,7 +44,7 @@ fn test_get_channel_video_list() {
     let done = client.get_channel_video_list(364, 30, 1).and_then(|resp| {
         let channel_video_list = resp.unwrap();
         let channel_name = channel_video_list.channel_info.channel_name;
-        let video_count = channel_video_list.total_video_count.unwrap();
+        let video_count = channel_video_list.total_video_count;
 
         println!("Found Channel: {}, {} videos", 
             channel_name, video_count);
@@ -59,3 +59,28 @@ fn test_get_channel_video_list() {
 
     core.run(done).expect("core err");
 }
+
+#[test]
+fn test_get_upcoming_video_list() {
+    let mut core = Core::new().unwrap();
+    let client = client(&core.handle());
+
+    let done = client.get_upcoming_video_list(6, 30, 1).and_then(|resp| {
+        let upcoming_videos = resp.unwrap();
+        let video_count = upcoming_videos.video_list
+            .map(|x| x.len())
+            .unwrap_or(0);
+
+        println!("Found {} upcoming videos", video_count);
+        assert!(video_count >= 0);
+        Ok(())
+    }).or_else(|err| {
+        eprintln!("Error: {}", err);
+        assert!(false);
+
+        Err(())
+    });
+
+    core.run(done).expect("core err");
+}
+

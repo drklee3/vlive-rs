@@ -20,8 +20,8 @@ pub trait VLiveRequester {
     fn get_channel_video_list(&self, channel_seq: u32, max_rows: u32, page_no: u32)
         -> Box<Future<Item = Option<channel::ChannelVideoList>, Error = Error>>;
     
-    // fn get_upcoming_video_list(&self, channel_seq: u32, max_rows: u32)
-    //     -> Box<Future<Item = Option<channel::ChannelUpcomingVideoList>, Error = Error>>;
+    fn get_upcoming_video_list(&self, channel_seq: u32, max_rows: u32, page_no: u32)
+        -> Box<Future<Item = Option<channel::ChannelUpcomingVideoList>, Error = Error>>;
 }
 
 impl<B, C: Connect> VLiveRequester for Client<C, B>
@@ -41,10 +41,10 @@ impl<B, C: Connect> VLiveRequester for Client<C, B>
         Box::new(get_channel_video_list(self, channel_seq, max_rows, page_no))
     }
     
-    // fn get_upcoming_video_list(&self, channel_seq: u32, max_rows: u32)
-    //     -> Box<Future<Item = Option<channel::ChannelUpcomingVideoList>, Error = Error>> {
-    //     Box::new(get_upcoming_video_list(self, channel_seq, max_rows))
-    // }
+    fn get_upcoming_video_list(&self, channel_seq: u32, max_rows: u32, page_no: u32)
+        -> Box<Future<Item = Option<channel::ChannelUpcomingVideoList>, Error = Error>> {
+        Box::new(get_upcoming_video_list(self, channel_seq, max_rows, page_no))
+    }
 }
 
 
@@ -121,6 +121,29 @@ pub fn get_channel_video_list<B, C> (client: &Client<C, B>, channel_seq: u32, ma
         .map(|resp| Some(resp.result))
     )
 }
-pub fn get_upcoming_video_list<B, C> (client: &Client<C, B>, channel_seq: u32, max_rows: u32) {
+pub fn get_upcoming_video_list<B, C> (client: &Client<C, B>, channel_seq: u32, max_rows: u32, page_no: u32)
+    -> Box<Future<Item = Option<channel::ChannelUpcomingVideoList>, Error = Error>>
+        where C: Connect,
+              B: Stream<Error = HyperError> + 'static,
+              B::Item: AsRef<[u8]> {
+    
+    let url = format!("{}getUpcomingVideoList?app_id={}&channelSeq={}&maxNumOfRows={}&pageNo={}",
+        BASE_URL, APP_ID, channel_seq, max_rows, page_no,
+    );
+    let uri = match Uri::from_str(&url) {
+        Ok(v) => v,
+        Err(why) => return Box::new(future::err(Error::Uri(why))),
+    };
 
+    Box::new(client.get(uri)
+        .and_then(|res| res.body().concat2())
+        .map_err(From::from)
+        .and_then(|body| {
+            // let string = str::from_utf8(&body).unwrap();
+            // println!("{}", string);
+            serde_json::from_slice::<channel::ChannelUpcomingVideoListResult>(&body).map_err(From::from)
+        })
+        .map(|resp| Some(resp.result))
+    )
 }
+
