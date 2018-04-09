@@ -61,6 +61,32 @@ fn test_get_channel_video_list() {
 }
 
 #[test]
+fn test_video_item() {
+    let mut core = Core::new().unwrap();
+    let client = client(&core.handle());
+
+    let done = client.get_channel_video_list(364, 30, 1).and_then(|resp| {
+        let video_list = resp.unwrap().video_list;
+        let last_video = video_list.last().unwrap();
+
+        println!("Found Video: {}, URL: {}, is live: {}", 
+            last_video.title,
+            last_video.url(),
+            last_video.is_live()
+        );
+        assert!(!last_video.is_live());
+        Ok(())
+    }).or_else(|err| {
+        eprintln!("Error: {}", err);
+        assert!(false);
+
+        Err(())
+    });
+
+    core.run(done).expect("core err");
+}
+
+#[test]
 fn test_get_upcoming_video_list() {
     let mut core = Core::new().unwrap();
     let client = client(&core.handle());
@@ -83,4 +109,5 @@ fn test_get_upcoming_video_list() {
 
     core.run(done).expect("core err");
 }
+
 

@@ -39,38 +39,6 @@ pub struct ChannelListItem {
 }
 
 #[derive(Deserialize, Debug)]
-pub struct VStore {
-    pub vstore_seq: u32,
-    pub vstore_home_link: String,
-}
-
-#[derive(Deserialize, Debug)]
-pub struct Board {
-    pub board_id: u32,
-}
-
-#[derive(Deserialize, Debug)]
-pub struct Channel {
-    pub channel_seq: u32,
-    pub channel_code: String,
-
-    #[serde(rename = "type")]
-    pub channel_type: String,
-    pub channel_name: String,
-    pub comment: String,
-    pub fan_count: u32,
-    pub channel_cover_img: String,
-    pub channel_profile_img: String,
-    pub representative_color: String,
-    pub background_color: String,
-    pub is_show_banner: bool,
-    pub is_show_upcoming: bool,
-    pub vstore: VStore,
-    pub celeb_board: Board,
-    pub fan_board: Board,
-}
-
-#[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ChannelInfo {
     pub channel_seq: u32,
@@ -129,9 +97,25 @@ pub struct VideoListItem {
     pub package_product_id: String,          //  ""
     pub product_type: String,                //  "NONE"
     pub play_time: u32,                      //  199
-    pub channel_plus_public_yn: String,      //  "N"
+
+    #[serde(deserialize_with = "bool_from_str")]
+    pub channel_plus_public_yn: bool,        //  "N"
     pub expose_status: String,               //  "EXPOSED"
-    pub on_air_start_at: String,             //  "2018-02-01 20:44:00"
+    
+    #[serde(deserialize_with = "timestamp_from_str")]
+    pub on_air_start_at: DateTime<FixedOffset>,             //  "2018-02-01 20:44:00"
+}
+
+impl VideoListItem {
+    /// Gets the URL to this video.
+    pub fn url(&self) -> String {
+        format!("http://www.vlive.tv/video/{}", self.video_seq)
+    }
+
+    /// Checks if this video is currently live.
+    pub fn is_live(&self) -> bool {
+        self.video_type == "LIVE"
+    }
 }
 
 #[derive(Deserialize, Debug)]
