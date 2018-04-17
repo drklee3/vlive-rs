@@ -21,6 +21,8 @@ pub enum Error {
     Io(IoError),
     /// An error from `hyper` while parsing a URI.
     Uri(UriError),
+    ///
+    Vlive(String),
 }
 
 impl From<IoError> for Error {
@@ -47,6 +49,12 @@ impl From<UriError> for Error {
     }
 }
 
+impl<'a> From<&'a str> for Error {
+    fn from(err: &'a str) -> Error {
+        Error::Vlive(err.to_string())
+    }
+}
+
 impl Display for Error {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         match *self {
@@ -54,6 +62,7 @@ impl Display for Error {
             Error::Json(ref inner) => inner.fmt(f),
             Error::Io(ref inner) => inner.fmt(f),
             Error::Uri(ref inner) => inner.fmt(f),
+            Error::Vlive(ref inner) => inner.fmt(f),
         }
     }
 }
@@ -65,6 +74,7 @@ impl StdError for Error {
             Error::Json(ref inner) => inner.description(),
             Error::Io(ref inner) => inner.description(),
             Error::Uri(ref inner) => inner.description(),
+            Error::Vlive(ref inner) => inner,
         }
     }
 }

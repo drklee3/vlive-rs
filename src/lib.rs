@@ -5,6 +5,9 @@ extern crate serde_json;
 extern crate hyper;
 extern crate futures;
 extern crate chrono;
+extern crate regex;
+#[macro_use]
+extern crate lazy_static;
 
 mod error;
 pub mod model;
