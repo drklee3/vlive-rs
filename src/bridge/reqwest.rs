@@ -37,7 +37,13 @@ impl VLiveRequester for Client {
         let uri = format!("{}decodeChannelCode?app_id={}&channelCode={}", BASE_URL, APP_ID, channel_code.as_ref());
         let response = self.get(&uri).send()?;
 
-        serde_json::from_reader(response).map_err(From::from)
+        serde_json::from_reader(response)
+            .map_err(From::from)
+            .and_then(|d: serde_json::Value| d
+                .pointer("/result/channelSeq")
+                .and_then(|d| d.as_u64())
+                .ok_or(Error::from("Invalid channelSeq"))
+            )
     }
 
     fn get_channel_video_list(&self, channel_seq: u32, max_rows: u32, page_no: u32)
@@ -81,7 +87,7 @@ impl VLiveRequester for Client {
         let uri = format!("http://global.apis.naver.com/rmcnmv/rmcnmv/vod_play_videoInfo.json?videoId={}&key={}",
             video_id, key);
         let response = self.get(&uri).send()?;
-        
+
         serde_json::from_reader(response)
             .map_err(From::from)
     }

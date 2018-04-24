@@ -29,6 +29,15 @@ fn test_find_channels() {
 }
 
 #[test]
+fn test_decode_channel_code() {
+    let client = Client::new();
+
+    let code = client.decode_channel_code("FE619").unwrap();
+
+    assert!(code == 13);
+}
+
+#[test]
 fn test_get_channel_video_list() {
     let client = Client::new();
     let video_list = client.get_channel_video_list(364, 30, 1).unwrap();
