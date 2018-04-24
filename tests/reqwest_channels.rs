@@ -18,6 +18,17 @@ fn test_get_channel_list() {
 }
 
 #[test]
+fn test_find_channels() {
+    let client = Client::new();
+
+    let channels = client.get_channel_list().unwrap().unwrap();
+    let found = channels.find_channels("bts");
+
+    println!("Found Channels: {:?}", &found);
+    assert!(found.len() == 2);
+}
+
+#[test]
 fn test_get_channel_video_list() {
     let client = Client::new();
     let video_list = client.get_channel_video_list(364, 30, 1).unwrap().unwrap();

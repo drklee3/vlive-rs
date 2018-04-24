@@ -26,6 +26,20 @@ impl ChannelList {
             })
             .cloned()
     }
+
+    pub fn find_channels<T: AsRef<str>>(&self, search: T) -> Vec<ChannelListItem> {
+        let mut found = self.0.clone();
+        found.retain(|chan| {
+            chan.name.to_lowercase().contains(
+                &search
+                    .as_ref()
+                    .to_string()
+                    .to_lowercase()
+            )
+        });
+
+        found
+    }
 }
 
 #[derive(Deserialize, Clone, Debug)]
