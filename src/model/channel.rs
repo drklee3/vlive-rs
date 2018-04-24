@@ -189,7 +189,7 @@ pub struct ChannelUpcomingVideoList {
 
 /// Wrapper for upcoming video list.
 #[derive(Deserialize, Debug)]
-pub struct ChannelUpcomingVideoListResult {
+pub(crate) struct ChannelUpcomingVideoListResult {
     pub result: ChannelUpcomingVideoList,
 }
 
@@ -207,6 +207,6 @@ pub struct ChannelVideoList {
 
 /// Wrapper for channel video list.
 #[derive(Deserialize, Debug)]
-pub struct ChannelVideoListResult {
+pub(crate) struct ChannelVideoListResult {
     pub result: ChannelVideoList,
 }
