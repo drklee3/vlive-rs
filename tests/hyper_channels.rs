@@ -1,13 +1,15 @@
+#![cfg(feature = "hyper-support")]
+
 extern crate futures;
 extern crate hyper;
 extern crate tokio_core;
-extern crate vlive_rs;
+extern crate vlive;
 
 use futures::Future;
 use hyper::client::HttpConnector;
 use hyper::{Body, Client};
 use tokio_core::reactor::{Core, Handle};
-use vlive_rs::bridge_hyper::VLiveRequester;
+use vlive::HyperVLiveRequester;
 
 #[inline]
 fn client(handle: &Handle) -> Client<HttpConnector, Body> {

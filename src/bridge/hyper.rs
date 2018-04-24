@@ -4,13 +4,13 @@ use hyper::{Error as HyperError, Uri};
 use serde_json;
 use std::str::FromStr;
 use std::str;
-use regex::Regex;
 use ::model::channel;
 use ::model::video;
 use ::Error;
+use ::bridge::util;
+use ::APP_ID;
+use ::BASE_URL;
 
-const APP_ID: &str = "8c6cc7b45d2568fb668be6e05b6e5a3b";
-const BASE_URL: &str = "http://api.vfan.vlive.tv/vproxy/channelplus/";
 
 pub trait VLiveRequester {
     fn get_channel_list(&self)
@@ -26,7 +26,7 @@ pub trait VLiveRequester {
         -> Box<Future<Item = Option<channel::ChannelUpcomingVideoList>, Error = Error>>;
     
     fn get_video(&self, video_seq: u32)
-        -> Box<Future<Item = Option<(String, String)>, Error = Error>>;
+        -> Box<Future<Item = Option<video::Video>, Error = Error>>;
 }
 
 impl<B, C: Connect> VLiveRequester for Client<C, B>
@@ -52,7 +52,7 @@ impl<B, C: Connect> VLiveRequester for Client<C, B>
     }
 
     fn get_video(&self, video_seq: u32)
-        -> Box<Future<Item = Option<(String, String)>, Error = Error>> {
+        -> Box<Future<Item = Option<video::Video>, Error = Error>> {
         Box::new(get_video(self, video_seq))
     }
 }
@@ -160,8 +160,9 @@ pub fn get_upcoming_video_list<B, C> (client: &Client<C, B>, channel_seq: u32, m
     )
 }
 
+
 pub fn get_video<B, C> (client: &Client<C, B>, video_seq: u32)
-    -> Box<Future<Item = Option<(String, String)>, Error = Error>>
+    -> Box<Future<Item = Option<video::Video>, Error = Error>>
         where C: Connect,
               B: Stream<Error = HyperError> + 'static,
               B::Item: AsRef<[u8]> {
@@ -172,32 +173,53 @@ pub fn get_video<B, C> (client: &Client<C, B>, video_seq: u32)
         Err(why) => return Box::new(future::err(Error::Uri(why))),
     };
 
-    // basically just scrape the page for video id and key since there's no api endpoint to get this
-    lazy_static! {
-        // wtf
-        static ref RE: Regex =
-            Regex::new(r#"vlive\.video\.init\((?:[) ,\n\t]*(?:"([a-zA-Z0-9_]*)"))(?:[) ,\n\t]*(?:"([a-zA-Z0-9_]*)"))(?:[) ,\n\t]*(?:"([a-zA-Z0-9_]*)"))(?:[) ,\n\t]*(?:"([a-zA-Z0-9_]*)"))(?:[) ,\n\t]*(?:"([a-zA-Z0-9_]*)"))(?:[) ,\n\t]*(?:"([a-zA-Z0-9_]*)"))(?:[) ,\n\t]*(?:"([a-zA-Z0-9_]*)"))"#)
-                .unwrap();
-    }
-
     Box::new(client.get(uri)
         .and_then(|res| res.body().concat2())
         .map_err(From::from)
-        .and_then(|body| {
-            // convert to string
-            let s = str::from_utf8(&body).unwrap();
+        .then(|body| {
+            match body {
+                Ok(val) => {
+                    // convert to string
+                    let s = str::from_utf8(&val).unwrap();
+                    if let Some((video_id, key)) = util::find_video_id_key(&s) {
+                        let url = format!("http://global.apis.naver.com/rmcnmv/rmcnmv/vod_play_videoInfo.json?videoId={}&key={}",
+                            video_id, key);
+                    
+                        // Ok((video_id.to_owned(), key.to_owned()))
+                        let uri = Uri::from_str(&url)
+                            .map_err(From::from)
+                            .unwrap();
 
+                        Some(client.get(uri))
+                    } else {
+                        None
+                    }
+                },
+                Err(e) => {
+                    None
+                }
+            }
+        })
+        .then(|res| {
+            match res {
+                Ok(val) => {
+                    val
+                        .map(|res| res.body().concat2())
+                        .map_err(From::from)
+                        .map(|body| {
+                            if let Some(body) = body {
+                                serde_json::from_slice::<video::Video>(&body)
+                                    .ok()   
+                            } else {
+                                None
+                            }
+                        })
+                },
+                Err(e) => {
+                    None
+                }
+            }
 
-            // check regex matches
-            let caps = match RE.captures(&s) {
-                Some(val) => val,
-                None => return Err(Error::from("Failed to find video id and key")),
-            };
-
-            let video_id = caps.get(6).map(|m| m.as_str()).unwrap();
-            let key = caps.get(7).map(|m| m.as_str()).unwrap();
-
-            Ok((video_id.to_owned(), key.to_owned()))
         })
         .map(|resp| Some(resp))
     )
@@ -211,7 +233,7 @@ pub fn get_video_data<B, C> (client: &Client<C, B>, video_id: &str, key: &str)
     
     let url = format!("http://global.apis.naver.com/rmcnmv/rmcnmv/vod_play_videoInfo.json?videoId={}&key={}",
         video_id, key);
-    
+
     let uri = match Uri::from_str(&url) {
         Ok(v) => v,
         Err(why) => return Box::new(future::err(Error::Uri(why))),

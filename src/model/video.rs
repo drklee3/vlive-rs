@@ -7,139 +7,138 @@ pub enum VideoType {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Cover {
     #[serde(rename = "type")]
-    type_: String,    // type_: "single",
-    source: String,  // source: "http://video.phinf.naver.net/20180201_87/1517478329771PWSCY_JPEG/a2b4ecf8-0734-11e8-89b9-0000000049b9_07.jpg"
+    pub type_: String,    // type_: "single",
+    pub source: String,  // source: "http://video.phinf.naver.net/20180201_87/1517478329771PWSCY_JPEG/a2b4ecf8-0734-11e8-89b9-0000000049b9_07.jpg"
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct Share {
-    usable: bool,
-    count: u32,
-    only_inner_services: bool,
+    pub usable: bool,
+    pub count: u32,
+    pub only_inner_services: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct User {
-    id: String,         // "muploader_j",
-    name: String,       // "muploader_j",
-    url: String,        // "null"
+    pub id: String,         // "muploader_j",
+    pub name: String,       // "muploader_j",
+    pub url: String,        // "null"
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ApiListItem {
-    name: String,
-    source: String,
+    pub name: String,
+    pub source: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct VideoMeta {
-    master_video_id: String,  // "0DC15652502D637372BA3E18CECAAE499F65",
-    content_id: String,      // "null",
-    service_id: u32,         // 2024,
-    count: u32,             // 180808,
-    interface_lang: String,  // "en_US",
-    url: String,            // "",
-    home_url: String,        // "null",
-    subject: String,        // "",
-    cover: Cover,
-    share: Share,
-    user: User,
-    api_list: Vec<ApiListItem>,    
+    pub master_video_id: String,  // "0DC15652502D637372BA3E18CECAAE499F65",
+    pub content_id: String,      // "null",
+    pub service_id: u32,         // 2024,
+    pub count: u32,             // 180808,
+    pub interface_lang: String,  // "en_US",
+    pub url: String,            // "",
+    pub home_url: String,        // "null",
+    pub subject: String,        // "",
+    pub cover: Cover,
+    pub share: Share,
+    pub user: User,
+    pub api_list: Vec<ApiListItem>,    
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct EncodingOption {
-    id: String,         // "144P_256_100_64"
-    name: String,       // "144P"
-    profile: String,    // "BASE"
-    width: u32,         // 250
-    height: u32,        // 144
+    pub id: String,         // "144P_256_100_64"
+    pub name: String,       // "144P"
+    pub profile: String,    // "BASE"
+    pub width: u32,         // 250
+    pub height: u32,        // 144
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Bitrate {
-    video: u32,
-    audio: u32,
+    pub video: f64,
+    pub audio: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct VideoItem {
-    id: String,             // "E49EC1F9611925347CFD30D5494F10929821",
+    pub id: String,             // "E49EC1F9611925347CFD30D5494F10929821",
     #[serde(rename = "useP2P")]
-    use_p2p: bool,           // false,
-    duration: f32,          // 620.538,
-    preview_duration: u32,   // 30,
-    size: u64,              // 12880198,
+    pub use_p2p: bool,           // false,
+    pub duration: f64,          // 620.538,
+    pub preview_duration: Option<u32>,   // 30,
+    pub size: u64,              // 12880198,
     #[serde(rename = "type")]
-    type_: String,           // "avc1",
-    encoding_option: EncodingOption,
-    bitrate: Bitrate,
-    p2p_meta_url: String,     // "",
-    p2p_url: String,         // "",
-    source: String,         // "http://globalv.p.naverrmc.edgesuite.net/global/read/global_v_2018_02_01_4/a36b6bbd-0734-11e8-89b9-0000000049b9.mp4?__gda__=1517618848_e4d87e6279f0e75cd59d483e6523a0e9"
-    
+    pub type_: String,           // "avc1",
+    pub encoding_option: EncodingOption,
+    pub bitrate: Bitrate,
+    pub p2p_meta_url: String,     // "",
+    pub p2p_url: String,         // "",
+    pub source: String,         // "http://globalv.p.naverrmc.edgesuite.net/global/read/global_v_2018_02_01_4/a36b6bbd-0734-11e8-89b9-0000000049b9.mp4?__gda__=1517618848_e4d87e6279f0e75cd59d483e6523a0e9"
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct Videos {
     #[serde(rename = "type")]
-    type_: String,       // "video",
-    has_preview: String, // "true",
-    list: Vec<VideoItem>,
+    pub type_: String,       // "video",
+    pub has_preview: String, // "true",
+    pub list: Vec<VideoItem>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Key {
     #[serde(rename = "type")]
-    type_: String,       // "param",
-    name: String,       // "__gda__",
-    value: String       // "1517618848_c6b0e8d115c8e780999621c9b8b0dfe7"
+    pub type_: String,       // "param",
+    pub name: String,       // "__gda__",
+    pub value: String       // "1517618848_c6b0e8d115c8e780999621c9b8b0dfe7"
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Stream {
     #[serde(rename = "type")]
-    type_: String,   // "HLS",
-    key: Key,
-    source: String, // "http://globalv.p.naverrmc.edgesuite.net/global/read/global_v_2018_02_01_4/hls/f4740c94-0734-11e8-8062-0000000041ed.m3u8"
+    pub type_: String,   // "HLS",
+    pub key: Key,
+    pub source: String, // "http://globalv.p.naverrmc.edgesuite.net/global/read/global_v_2018_02_01_4/hls/f4740c94-0734-11e8-8062-0000000041ed.m3u8"
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Caption {
-    language: String,   // "en",
-    country: String,    // "US",
-    locale: String,     // "en_US",
-    label: String,      // "English",
-    source: String,     // "http://caption.rmcnmv.naver.net/globalv/global_meta/read/global_v_2018_02_01_3/09c42cb8-0741-11e8-8582-3ca82a214e91-1517483655295_en_US_cp.vtt?__gda__=1517618848_dc2c8b243b42c43632d58757677a189a"
+    pub language: String,   // "en",
+    pub country: String,    // "US",
+    pub locale: String,     // "en_US",
+    pub label: String,      // "English",
+    pub source: String,     // "http://caption.rmcnmv.naver.net/globalv/global_meta/read/global_v_2018_02_01_3/09c42cb8-0741-11e8-8582-3ca82a214e91-1517483655295_en_US_cp.vtt?__gda__=1517618848_dc2c8b243b42c43632d58757677a189a"
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct Captions {
-    caption_lang: String,
-    list: Vec<Caption>,
+    pub caption_lang: String,
+    pub list: Vec<Caption>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Thumbnail {
-    time: u64,
-    source: String,
+    pub time: f64,
+    pub source: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Thumbnails {
-    list: Vec<Thumbnail>,
+    pub list: Vec<Thumbnail>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Video {
-    meta: VideoMeta,
-    videos: Videos,
-    streams: Vec<Stream>,
-    captions: Captions,
-    thumbnails: Thumbnails,
+    pub meta: VideoMeta,
+    pub videos: Videos,
+    pub streams: Vec<Stream>,
+    pub captions: Captions,
+    pub thumbnails: Thumbnails,
 }
