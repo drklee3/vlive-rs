@@ -160,7 +160,8 @@ pub fn get_upcoming_video_list<B, C> (client: &Client<C, B>, channel_seq: u32, m
     )
 }
 
-
+// TODO: get this working....
+// idk how to even futures wtf
 pub fn get_video<B, C> (client: &Client<C, B>, video_seq: u32)
     -> Box<Future<Item = Option<video::Video>, Error = Error>>
         where C: Connect,

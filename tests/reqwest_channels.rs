@@ -57,12 +57,3 @@ fn test_get_upcoming_video_list() {
     println!("Found {} upcoming videos", video_count);
     assert!(video_count >= 0);
 }
-
-#[test]
-fn test_get_video() {
-    let client = Client::new();
-    let video = client.get_video(68140).unwrap().unwrap();
-
-    println!("Found video: {}", video.meta.url);
-    assert!(video.meta.url == "http://vlive.tv/video/68140");
-}
