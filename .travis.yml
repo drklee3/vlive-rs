@@ -10,7 +10,7 @@ script:
 - |
   travis-cargo build -- --all-features &&
   travis-cargo test -- --all-features &&
-  travis-cargo doc -- --all-features
+  travis-cargo doc -- --all-features --no-deps
 after_success:
 - travis-cargo --only stable doc-upload
 - travis-cargo coveralls --no-sudo --verify
