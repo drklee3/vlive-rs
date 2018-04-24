@@ -10,7 +10,7 @@ use vlive::ReqwestVLiveRequester;
 fn test_get_channel_list() {
     let client = Client::new();
 
-    let channels = client.get_channel_list().unwrap().unwrap();
+    let channels = client.get_channel_list().unwrap();
     let channel = channels.find_channel("bts").unwrap();
 
     println!("Found Channel: {:?}", &channel);
@@ -21,7 +21,7 @@ fn test_get_channel_list() {
 fn test_find_channels() {
     let client = Client::new();
 
-    let channels = client.get_channel_list().unwrap().unwrap();
+    let channels = client.get_channel_list().unwrap();
     let found = channels.find_channels("bts");
 
     println!("Found Channels: {:?}", &found);
@@ -31,7 +31,7 @@ fn test_find_channels() {
 #[test]
 fn test_get_channel_video_list() {
     let client = Client::new();
-    let video_list = client.get_channel_video_list(364, 30, 1).unwrap().unwrap();
+    let video_list = client.get_channel_video_list(364, 30, 1).unwrap();
 
     let channel_name = video_list.channel_info.channel_name;
     let video_count = video_list.total_video_count;
@@ -44,7 +44,7 @@ fn test_get_channel_video_list() {
 #[test]
 fn test_video_item() {
     let client = Client::new();
-    let video_list = client.get_channel_video_list(364, 30, 1).unwrap().unwrap().video_list;
+    let video_list = client.get_channel_video_list(364, 30, 1).unwrap().video_list;
 
     let last_video = video_list.last().unwrap();
 
@@ -59,7 +59,7 @@ fn test_video_item() {
 #[test]
 fn test_get_upcoming_video_list() {
     let client = Client::new();
-    let upcoming_videos = client.get_upcoming_video_list(6, 30, 1).unwrap().unwrap();
+    let upcoming_videos = client.get_upcoming_video_list(6, 30, 1).unwrap();
 
     let video_count = upcoming_videos.video_list
         .map(|x| x.len())

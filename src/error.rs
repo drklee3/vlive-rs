@@ -29,7 +29,7 @@ pub enum Error {
     Json(JsonError),
     /// A `std::io` module error.
     Io(IoError),
-    ///
+    /// A `vlive` crate error.
     Vlive(String),
 }
 

@@ -14,52 +14,52 @@ use ::BASE_URL;
 
 pub trait VLiveRequester {
     fn get_channel_list(&self)
-        -> Box<Future<Item = Option<channel::ChannelList>, Error = Error>>;
+        -> Box<Future<Item = channel::ChannelList, Error = Error>>;
     
     fn decode_channel_code<T: AsRef<str>>(&self, channel_code: T)
-        -> Box<Future<Item = Option<u64>, Error = Error>>;
+        -> Box<Future<Item = u64, Error = Error>>;
     
     fn get_channel_video_list(&self, channel_seq: u32, max_rows: u32, page_no: u32)
-        -> Box<Future<Item = Option<channel::ChannelVideoList>, Error = Error>>;
+        -> Box<Future<Item = channel::ChannelVideoList, Error = Error>>;
     
     fn get_upcoming_video_list(&self, channel_seq: u32, max_rows: u32, page_no: u32)
-        -> Box<Future<Item = Option<channel::ChannelUpcomingVideoList>, Error = Error>>;
+        -> Box<Future<Item = channel::ChannelUpcomingVideoList, Error = Error>>;
     
-    fn get_video(&self, video_seq: u32)
-        -> Box<Future<Item = Option<video::Video>, Error = Error>>;
+    // fn get_video(&self, video_seq: u32)
+    //     -> Box<Future<Item = video::Video, Error = Error>>;
 }
 
 impl<B, C: Connect> VLiveRequester for Client<C, B>
     where B: Stream<Error = HyperError> + 'static, B::Item: AsRef<[u8]> {
     fn get_channel_list(&self)
-        -> Box<Future<Item = Option<channel::ChannelList>, Error = Error>> {
+        -> Box<Future<Item = channel::ChannelList, Error = Error>> {
         Box::new(get_channel_list(self))
     }
 
     fn decode_channel_code<T: AsRef<str>>(&self, channel_code: T)
-        -> Box<Future<Item = Option<u64>, Error = Error>> {
+        -> Box<Future<Item = u64, Error = Error>> {
         Box::new(decode_channel_code(self, channel_code))
     }
     
     fn get_channel_video_list(&self, channel_seq: u32, max_rows: u32, page_no: u32)
-        -> Box<Future<Item = Option<channel::ChannelVideoList>, Error = Error>> {
+        -> Box<Future<Item = channel::ChannelVideoList, Error = Error>> {
         Box::new(get_channel_video_list(self, channel_seq, max_rows, page_no))
     }
     
     fn get_upcoming_video_list(&self, channel_seq: u32, max_rows: u32, page_no: u32)
-        -> Box<Future<Item = Option<channel::ChannelUpcomingVideoList>, Error = Error>> {
+        -> Box<Future<Item = channel::ChannelUpcomingVideoList, Error = Error>> {
         Box::new(get_upcoming_video_list(self, channel_seq, max_rows, page_no))
     }
-
-    fn get_video(&self, video_seq: u32)
-        -> Box<Future<Item = Option<video::Video>, Error = Error>> {
-        Box::new(get_video(self, video_seq))
-    }
+    
+    // fn get_video(&self, video_seq: u32)
+    //     -> Box<Future<Item = video::Video, Error = Error>> {
+    //     Box::new(get_video(self, video_seq))
+    // }
 }
 
 
 pub fn get_channel_list<B, C> (client: &Client<C, B>)
-    -> Box<Future<Item = Option<channel::ChannelList>, Error = Error>>
+    -> Box<Future<Item = channel::ChannelList, Error = Error>>
 	    where C: Connect,
 	          B: Stream<Error = HyperError> + 'static,
 	          B::Item: AsRef<[u8]> {
@@ -74,16 +74,11 @@ pub fn get_channel_list<B, C> (client: &Client<C, B>)
         .and_then(|res| res.body().concat2())
         .map_err(From::from)
         .and_then(|body| serde_json::from_slice::<channel::ChannelList>(&body).map_err(From::from))
-        .map(|resp| if !resp.0.is_empty() {
-            Some(resp)
-        } else {
-            None
-        }))
+    )
 }
 
-
 pub fn decode_channel_code<B, C, T> (client: &Client<C, B>, channel_code: T)
-    -> Box<Future<Item = Option<u64>, Error = Error>>
+    -> Box<Future<Item = u64, Error = Error>>
         where T: AsRef<str>,
               C: Connect,
               B: Stream<Error = HyperError> + 'static,
@@ -101,17 +96,17 @@ pub fn decode_channel_code<B, C, T> (client: &Client<C, B>, channel_code: T)
         .and_then(|body| 
             serde_json::from_slice::<serde_json::Value>(&body)
                 .map_err(From::from)
-                .map(|d| d
+                .and_then(|d| d
                     .pointer("/result/channelSeq")
-                    .map(|d| d.as_u64())
-                    .unwrap_or(None)
+                    .and_then(|d| d.as_u64())
+                    .ok_or(Error::from("Invalid channelSeq"))
                 )
         )
     )
 }
 
 pub fn get_channel_video_list<B, C> (client: &Client<C, B>, channel_seq: u32, max_rows: u32, page_no: u32)
-    -> Box<Future<Item = Option<channel::ChannelVideoList>, Error = Error>>
+    -> Box<Future<Item = channel::ChannelVideoList, Error = Error>>
         where C: Connect,
               B: Stream<Error = HyperError> + 'static,
               B::Item: AsRef<[u8]> {
@@ -131,11 +126,11 @@ pub fn get_channel_video_list<B, C> (client: &Client<C, B>, channel_seq: u32, ma
             // println!("{}", string);
             serde_json::from_slice::<channel::ChannelVideoListResult>(&body).map_err(From::from)
         })
-        .map(|resp| Some(resp.result))
+        .map(|resp| resp.result)
     )
 }
 pub fn get_upcoming_video_list<B, C> (client: &Client<C, B>, channel_seq: u32, max_rows: u32, page_no: u32)
-    -> Box<Future<Item = Option<channel::ChannelUpcomingVideoList>, Error = Error>>
+    -> Box<Future<Item = channel::ChannelUpcomingVideoList, Error = Error>>
         where C: Connect,
               B: Stream<Error = HyperError> + 'static,
               B::Item: AsRef<[u8]> {
@@ -156,14 +151,15 @@ pub fn get_upcoming_video_list<B, C> (client: &Client<C, B>, channel_seq: u32, m
             // println!("{}", string);
             serde_json::from_slice::<channel::ChannelUpcomingVideoListResult>(&body).map_err(From::from)
         })
-        .map(|resp| Some(resp.result))
+        .map(|resp| resp.result)
     )
 }
 
 // TODO: get this working....
 // idk how to even futures wtf
+/*
 pub fn get_video<B, C> (client: &Client<C, B>, video_seq: u32)
-    -> Box<Future<Item = Option<video::Video>, Error = Error>>
+    -> Box<Future<Item = video::Video, Error = Error>>
         where C: Connect,
               B: Stream<Error = HyperError> + 'static,
               B::Item: AsRef<[u8]> {
@@ -222,12 +218,12 @@ pub fn get_video<B, C> (client: &Client<C, B>, video_seq: u32)
             }
 
         })
-        .map(|resp| Some(resp))
     )
 }
+*/
 
 pub fn get_video_data<B, C> (client: &Client<C, B>, video_id: &str, key: &str)
-    -> Box<Future<Item = Option<video::Video>, Error = Error>>
+    -> Box<Future<Item = video::Video, Error = Error>>
         where C: Connect,
               B: Stream<Error = HyperError> + 'static,
               B::Item: AsRef<[u8]> {
@@ -246,6 +242,5 @@ pub fn get_video_data<B, C> (client: &Client<C, B>, video_id: &str, key: &str)
         .and_then(|body| {
             serde_json::from_slice::<video::Video>(&body).map_err(From::from)
         })
-        .map(|resp| Some(resp))
     )
 }

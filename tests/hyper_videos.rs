@@ -17,6 +17,7 @@ fn client(handle: &Handle) -> Client<HttpConnector, Body> {
         .build(handle)
 }
 
+/*
 #[test]
 fn test_get_video() {
     let mut core = Core::new().unwrap();
@@ -37,3 +38,4 @@ fn test_get_video() {
 
     core.run(done).expect("core err");
 }
+*/

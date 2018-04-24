@@ -23,10 +23,29 @@ fn test_get_channel_list() {
     let client = client(&core.handle());
 
     let done = client.get_channel_list().and_then(|resp| {
-        let channel = resp.and_then(|x| x.find_channel("bts")).unwrap();
+        let channel = resp.find_channel("bts").unwrap();
 
         println!("Found Channel: {:?}", &channel);
         assert!(channel.code == Some("FE619".into()));
+        Ok(())
+    }).or_else(|err| {
+        eprintln!("Error: {}", err);
+        assert!(false);
+
+        Err(())
+    });
+
+    core.run(done).expect("core err");
+}
+
+#[test]
+fn test_decode_channel_code() {
+    let mut core = Core::new().unwrap();
+    let client = client(&core.handle());
+
+    let done = client.decode_channel_code("FE619").and_then(|code| {
+
+        assert!(code == 13);
         Ok(())
     }).or_else(|err| {
         eprintln!("Error: {}", err);
@@ -44,7 +63,7 @@ fn test_get_channel_video_list() {
     let client = client(&core.handle());
 
     let done = client.get_channel_video_list(364, 30, 1).and_then(|resp| {
-        let channel_video_list = resp.unwrap();
+        let channel_video_list = resp;
         let channel_name = channel_video_list.channel_info.channel_name;
         let video_count = channel_video_list.total_video_count;
 
@@ -68,7 +87,7 @@ fn test_video_item() {
     let client = client(&core.handle());
 
     let done = client.get_channel_video_list(364, 30, 1).and_then(|resp| {
-        let video_list = resp.unwrap().video_list;
+        let video_list = resp.video_list;
         let last_video = video_list.last().unwrap();
 
         println!("Found Video: {}, URL: {}, is live: {}", 
@@ -94,7 +113,7 @@ fn test_get_upcoming_video_list() {
     let client = client(&core.handle());
 
     let done = client.get_upcoming_video_list(6, 30, 1).and_then(|resp| {
-        let upcoming_videos = resp.unwrap();
+        let upcoming_videos = resp;
         let video_count = upcoming_videos.video_list
             .map(|x| x.len())
             .unwrap_or(0);
