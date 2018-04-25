@@ -104,6 +104,12 @@ pub struct ChannelInfo {
     pub upcoming_show_yn: bool,           //  "N"
 }
 
+impl ChannelInfo {
+    /// Gets the URL to this video.
+    pub fn url(&self) -> String {
+        format!("http://channels.vlive.tv/{}", self.channel_code)
+    }
+}
 /// Information on a video
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]

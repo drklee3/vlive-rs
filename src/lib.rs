@@ -1,3 +1,12 @@
+/// # vlive-rs
+/// 
+/// Unofficial Rust crate for VLive API
+/// 
+/// VLive does not have a public API so some actions may not be be ideal,
+/// such as having to scape a video page in order to retrieve video data.
+/// Some functions will make multiple API requests in order to fetch required data.
+/// 
+
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
