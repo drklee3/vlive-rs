@@ -29,6 +29,28 @@ fn test_find_channels() {
 }
 
 #[test]
+fn test_find_channel() {
+    let client = Client::new();
+
+    let channels = client.get_channel_list().unwrap();
+    let found = channels.find_channel("bts").unwrap();
+
+    println!("Found Channel: {:?}", &found);
+    assert!(found.name == "BTS");
+}
+
+#[test]
+fn test_find_partial_channel() {
+    let client = Client::new();
+
+    let channels = client.get_channel_list().unwrap();
+    let found = channels.find_partial_channel("good day").unwrap();
+
+    println!("Found Channel: {:?}", &found);
+    assert!(found.name == "GOOD DAY(굿데이)");
+}
+
+#[test]
 fn test_decode_channel_code() {
     let client = Client::new();
 
