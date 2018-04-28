@@ -169,7 +169,7 @@ pub struct Video {
     /// .m3u8 streams
     pub streams: Vec<Stream>,
     /// .vtt captions
-    pub captions: Captions,
+    pub captions: Option<Captions>,
     /// .jpg thumbnails
     pub thumbnails: Thumbnails,
 }
