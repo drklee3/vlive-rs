@@ -1,17 +1,17 @@
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum VideoType {
     VOD,
     LIVE,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Cover {
     #[serde(rename = "type")]
     pub type_: String,    // type_: "single",
     pub source: String,  // source: "http://video.phinf.naver.net/20180201_87/1517478329771PWSCY_JPEG/a2b4ecf8-0734-11e8-89b9-0000000049b9_07.jpg"
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Share {
     pub usable: bool,
@@ -19,20 +19,20 @@ pub struct Share {
     pub only_inner_services: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct User {
     pub id: String,         // "muploader_j",
     pub name: String,       // "muploader_j",
     pub url: String,        // "null"
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ApiListItem {
     pub name: String,
     pub source: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct VideoMeta {
     pub master_video_id: String,  // "0DC15652502D637372BA3E18CECAAE499F65",
@@ -49,7 +49,7 @@ pub struct VideoMeta {
     pub api_list: Vec<ApiListItem>,    
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EncodingOption {
     /// Resolution name and dimension code
     pub id: String,         // "144P_256_100_64"
@@ -63,7 +63,7 @@ pub struct EncodingOption {
     pub height: u32,        // 144
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Bitrate {
     /// Video bitrate in kbps
     pub video: f64,
@@ -71,7 +71,7 @@ pub struct Bitrate {
     pub audio: f64,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct VideoItem {
     /// ID of video
@@ -95,7 +95,7 @@ pub struct VideoItem {
     pub source: String,         // "http://globalv.p.naverrmc.edgesuite.net/global/read/global_v_2018_02_01_4/a36b6bbd-0734-11e8-89b9-0000000049b9.mp4?__gda__=1517618848_e4d87e6279f0e75cd59d483e6523a0e9"
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Videos {
     #[serde(rename = "type")]
@@ -104,7 +104,7 @@ pub struct Videos {
     pub list: Vec<VideoItem>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Key {
     #[serde(rename = "type")]
     pub type_: String,       // "param",
@@ -113,7 +113,7 @@ pub struct Key {
     pub value: String       // "1517618848_c6b0e8d115c8e780999621c9b8b0dfe7"
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Stream {
     /// Type of stream, usually `HLS`
     #[serde(rename = "type")]
@@ -123,7 +123,7 @@ pub struct Stream {
     pub source: String, // "http://globalv.p.naverrmc.edgesuite.net/global/read/global_v_2018_02_01_4/hls/f4740c94-0734-11e8-8062-0000000041ed.m3u8"
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Caption {
     /// Language of caption, such as `en`
     pub language: String,   // "en",
@@ -137,7 +137,7 @@ pub struct Caption {
     pub source: String,     // "http://caption.rmcnmv.naver.net/globalv/global_meta/read/global_v_2018_02_01_3/09c42cb8-0741-11e8-8582-3ca82a214e91-1517483655295_en_US_cp.vtt?__gda__=1517618848_dc2c8b243b42c43632d58757677a189a"
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Captions {
     /// Default / selected caption language(?)
@@ -146,7 +146,7 @@ pub struct Captions {
     pub list: Vec<Caption>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Thumbnail {
     /// Time during the video for this thumbnail in seconds
     pub time: f64,
@@ -154,13 +154,13 @@ pub struct Thumbnail {
     pub source: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Thumbnails {
     /// List of available thumbnails
     pub list: Vec<Thumbnail>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Video {
     /// Video information
     pub meta: VideoMeta,

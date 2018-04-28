@@ -14,7 +14,7 @@ pub enum ChannelType {
 }
 
 /// List of all channels on VLive
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Clone, Debug)]
 pub struct ChannelList(pub Vec<ChannelListItem>);
 
 impl ChannelList {
@@ -76,7 +76,7 @@ pub struct ChannelListItem {
 }
 
 /// Information on a channel
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ChannelInfo {
     /// Channel ID, used in API queries.
@@ -125,7 +125,7 @@ impl ChannelInfo {
     }
 }
 /// Information on a video
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct VideoListItem {
     /// The ID of the video, used in the URL.
@@ -198,7 +198,7 @@ impl VideoListItem {
 }
 
 /// Upcoming videos for a channel
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ChannelUpcomingVideoList {
     /// Total count of upcoming videos.
@@ -208,13 +208,13 @@ pub struct ChannelUpcomingVideoList {
 }
 
 /// Wrapper for upcoming video list.
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Clone, Debug)]
 pub(crate) struct ChannelUpcomingVideoListResult {
     pub result: ChannelUpcomingVideoList,
 }
 
 /// A list of a channel's videos
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ChannelVideoList {
     /// Information about this channel
@@ -226,7 +226,7 @@ pub struct ChannelVideoList {
 }
 
 /// Wrapper for channel video list.
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Clone, Debug)]
 pub(crate) struct ChannelVideoListResult {
     pub result: ChannelVideoList,
 }
