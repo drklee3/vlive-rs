@@ -22,39 +22,62 @@ impl ChannelList {
     pub fn find_channel<T: AsRef<str>>(&self, search: T) -> Option<ChannelListItem> {
         self.0
             .iter()
-            .find(|chan|{
+            .find(|chan|
                 chan.name.to_lowercase() == search
-                        .as_ref()
-                        .to_string()
-                        .to_lowercase()
-            })
+                    .as_ref()
+                    .to_string()
+                    .to_lowercase()
+            )
             .cloned()
     }
     /// Searches for a channel by name, but returns the first one with a partial match.  This is case insensitive.
     pub fn find_partial_channel<T: AsRef<str>>(&self, search: T) -> Option<ChannelListItem> {
         self.0
             .iter()
-            .find(|chan|{
+            .find(|chan|
                 chan.name.to_lowercase().contains(
-                &search
-                    .as_ref()
-                    .to_string()
-                    .to_lowercase()
+                    &search
+                        .as_ref()
+                        .to_string()
+                        .to_lowercase()
+                )
             )
+            .cloned()
+    }
+
+    /// Same as `find_partial_channel` but also checks if the channel code matches.
+    pub fn find_partial_channel_or_code<T: AsRef<str>>(&self, search: T) -> Option<ChannelListItem> {
+        self.0
+            .iter()
+            .find(|chan| {
+                chan.name.to_lowercase().contains(
+                    &search
+                        .as_ref()
+                        .to_string()
+                        .to_lowercase()
+                ) || if let Some(ref code) = chan.code {
+                    // search if code matches
+                    code.to_lowercase() == search
+                        .as_ref()
+                        .to_string()
+                        .to_lowercase()
+                } else {
+                    false
+                }
             })
             .cloned()
     }
     /// Searches for all channels that contain a string.  This is case insensitive.
     pub fn find_channels<T: AsRef<str>>(&self, search: T) -> Vec<ChannelListItem> {
         let mut found = self.0.clone();
-        found.retain(|chan| {
+        found.retain(|chan|
             chan.name.to_lowercase().contains(
                 &search
                     .as_ref()
                     .to_string()
                     .to_lowercase()
             )
-        });
+        );
 
         found
     }

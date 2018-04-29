@@ -51,6 +51,17 @@ fn test_find_partial_channel() {
 }
 
 #[test]
+fn test_find_partial_channel_or_code() {
+    let client = Client::new();
+
+    let channels = client.get_channel_list().unwrap();
+    let found = channels.find_partial_channel_or_code("fe619").unwrap();
+
+    println!("Found Channel: {:?}", &found);
+    assert!(found.name == "BTS");
+}
+
+#[test]
 fn test_decode_channel_code() {
     let client = Client::new();
 
