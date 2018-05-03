@@ -167,9 +167,21 @@ pub struct Video {
     /// .mp4 videos
     pub videos: Videos,
     /// .m3u8 streams
-    pub streams: Vec<Stream>,
+    pub streams: Option<Vec<Stream>>,
     /// .vtt captions
     pub captions: Option<Captions>,
     /// .jpg thumbnails
-    pub thumbnails: Thumbnails,
+    pub thumbnails: Option<Thumbnails>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct VideoStatus {
+    pub video_seq: u64,
+    pub status: String,
+    pub vid: String,
+    pub inkey: String,
+    pub disable_ad: bool,
+    pub start_time: u64,
+    pub view_type: String,
 }

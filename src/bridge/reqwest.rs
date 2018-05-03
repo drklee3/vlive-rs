@@ -1,4 +1,5 @@
 use reqwest::Client;
+use reqwest::header::Referer;
 use model::channel;
 use model::video;
 use serde_json;
@@ -76,8 +77,11 @@ impl VLiveRequester for Client {
 
     fn get_video(&self, video_seq: u32)
         -> Result<video::Video> {
-        let uri = format!("http://www.vlive.tv/video/{}", video_seq);
-        let response = self.get(&uri).send()?.text()?;
+        let uri = format!("http://www.vlive.tv/video/init/view?videoSeq={}", video_seq);
+        let response = self
+            .get(&uri)
+            .header(Referer::new(format!("http://www.vlive.tv/video/{}", video_seq)))
+            .send()?.text()?;
 
         let (video_id, key) = match util::find_video_id_key(&response) {
             Some((video_id, key)) => (video_id, key),
