@@ -24,6 +24,9 @@ pub trait VLiveRequester {
     
     fn get_video(&self, video_seq: u32)
         -> Result<video::Video>;
+    
+    fn get_live_video(&self, video_seq: u32)
+        -> Result<video::LiveStreamInfo>;
 }
 
 impl VLiveRequester for Client {
@@ -75,16 +78,22 @@ impl VLiveRequester for Client {
             })
     }
 
-    fn get_video(&self, video_seq: u32)
-        -> Result<video::Video> {
+    fn get_video(&self, video_seq: u32) -> Result<video::Video> {
         let uri = format!("http://www.vlive.tv/video/init/view?videoSeq={}", video_seq);
         let response = self
             .get(&uri)
             .header(Referer::new(format!("http://www.vlive.tv/video/{}", video_seq)))
             .send()?.text()?;
 
-        let (video_id, key) = match util::find_video_id_key(&response) {
-            Some((video_id, key)) => (video_id, key),
+        let (video_id, key) = match util::find_video(&response) {
+            Some(val) => {
+                if !val.has_vid_key() {
+                    return Err(Error::from("No video ID or Key"));
+                }
+
+                // safe to unwrap here
+                (val.vid.unwrap(), val.inkey.unwrap())
+            },
             None => return Err(Error::from("Could not find video ID and key")),
         };
 
@@ -93,6 +102,26 @@ impl VLiveRequester for Client {
         let response = self.get(&uri).send()?;
 
         serde_json::from_reader(response)
+            .map_err(From::from)
+    }
+
+    fn get_live_video(&self, video_seq: u32) -> Result<video::LiveStreamInfo> {
+        let uri = format!("http://www.vlive.tv/video/init/view?videoSeq={}", video_seq);
+        let response = self
+            .get(&uri)
+            .header(Referer::new(format!("http://www.vlive.tv/video/{}", video_seq)))
+            .send()?.text()?;
+
+        let video_status = match util::find_video(&response) {
+            Some(val) => val,
+            None => return Err(Error::from("Could not find video ID and key")),
+        };
+
+        if video_status.live_stream_info.is_none() {
+            return Err(Error::from("Video is not live or is invalid"));
+        }
+
+        serde_json::from_str::<video::LiveStreamInfo>(&video_status.live_stream_info.unwrap())
             .map_err(From::from)
     }
 }

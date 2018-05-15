@@ -176,12 +176,39 @@ pub struct Video {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
-pub(crate) struct VideoStatus {
+pub struct LiveStreamResolution {
+    pub name: String,
+    pub width: u64,
+    pub height: u64,
+    pub cdn_url: String,
+    pub quality: String,
+    pub stream: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct LiveStreamInfo {
+    pub use_key: bool,
+    pub live_status: String,
+    pub resolutions: Vec<LiveStreamResolution>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct VideoStatus {
     pub video_seq: u64,
     pub status: String,
-    pub vid: String,
-    pub inkey: String,
+    pub vid: Option<String>,
+    pub inkey: Option<String>,
+    pub live_stream_info: Option<String>,
     pub disable_ad: bool,
     pub start_time: u64,
     pub view_type: String,
+}
+
+impl VideoStatus {
+    /// If this video has video id and key
+    pub fn has_vid_key(&self) -> bool {
+        self.vid.is_some() && self.inkey.is_some()
+    }
 }
