@@ -108,5 +108,5 @@ fn test_get_upcoming_video_list() {
         .unwrap_or(0);
 
     println!("Found {} upcoming videos", video_count);
-    assert!(video_count >= 0);
+    assert!(true);
 }

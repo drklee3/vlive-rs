@@ -15,6 +15,7 @@ fn test_get_video() {
     assert!(video.meta.url == "http://vlive.tv/video/67845");
 }
 
+#[ignore] // ignore this test as needs a video that's live to pass
 #[test]
 fn test_get_live_video() {
     let client = Client::new();
