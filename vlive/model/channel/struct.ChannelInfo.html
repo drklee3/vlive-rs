@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `ChannelInfo` struct in crate `vlive`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, ChannelInfo">
+
+    <title>vlive::model::channel::ChannelInfo - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css"
+          id="mainThemeStyle">
+    
+    <link rel="stylesheet" type="text/css" href="../../../dark.css">
+    <link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle">
+    <script src="../../../storage.js"></script>
+    
+
+    
+    
+</head>
+<body class="rustdoc struct">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
+        
+        <p class='location'>Struct ChannelInfo</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#fields">Fields</a><div class="sidebar-links"><a href="#structfield.channel_seq">channel_seq</a><a href="#structfield.basic_channel_seq">basic_channel_seq</a><a href="#structfield.channel_code">channel_code</a><a href="#structfield.channel_plus_type">channel_plus_type</a><a href="#structfield.channel_name">channel_name</a><a href="#structfield.representative_color">representative_color</a><a href="#structfield.channel_profile_image">channel_profile_image</a><a href="#structfield.background_color">background_color</a><a href="#structfield.channel_cover_image">channel_cover_image</a><a href="#structfield.fan_count">fan_count</a><a href="#structfield.comment">comment</a><a href="#structfield.prohibited_word_like">prohibited_word_like</a><a href="#structfield.prohibited_word_exact">prohibited_word_exact</a><a href="#structfield.sns_share_img">sns_share_img</a><a href="#structfield.banner_show_yn">banner_show_yn</a><a href="#structfield.qrcode">qrcode</a><a href="#structfield.upcoming_show_yn">upcoming_show_yn</a></div><a class="sidebar-title" href="#methods">Methods</a><div class="sidebar-links"><a href="#method.url">url</a></div><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Clone">Clone</a><a href="#impl-Debug">Debug</a></div><a class="sidebar-title" href="#synthetic-implementations">Auto Trait Implementations</a><div class="sidebar-links"><a href="#impl-Send">Send</a><a href="#impl-Sync">Sync</a></div></div><p class='location'><a href='../../index.html'>vlive</a>::<wbr><a href='../index.html'>model</a>::<wbr><a href='index.html'>channel</a></p><script>window.sidebarCurrent = {name: 'ChannelInfo', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
+    </nav>
+
+    <div class="theme-picker">
+        <button id="theme-picker" aria-label="Pick another theme!">
+            <img src="../../../brush.svg" width="18" alt="Pick another theme!">
+        </button>
+        <div id="theme-choices"></div>
+    </div>
+    <script src="../../../theme.js"></script>
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Struct <a href='../../index.html'>vlive</a>::<wbr><a href='../index.html'>model</a>::<wbr><a href='index.html'>channel</a>::<wbr><a class="struct" href=''>ChannelInfo</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../../src/vlive/model/channel.rs.html#104-142' title='goto source code'>[src]</a></span></h1><div class="docblock type-decl"><pre class='rust struct'>pub struct ChannelInfo {
+    pub channel_seq: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>,
+    pub basic_channel_seq: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>,
+    pub channel_code: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>,
+    pub channel_plus_type: <a class="enum" href="../../../vlive/model/channel/enum.ChannelType.html" title="enum vlive::model::channel::ChannelType">ChannelType</a>,
+    pub channel_name: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>,
+    pub representative_color: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>,
+    pub channel_profile_image: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>,
+    pub background_color: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>,
+    pub channel_cover_image: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>,
+    pub fan_count: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>,
+    pub comment: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>,
+    pub prohibited_word_like: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>,
+    pub prohibited_word_exact: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>,
+    pub sns_share_img: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>,
+    pub banner_show_yn: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>,
+    pub qrcode: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>,
+    pub upcoming_show_yn: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>,
+}</pre></div><div class='docblock'><p>Information on a channel</p>
+</div><h2 id='fields' class='fields small-section-header'>
+                       Fields<a href='#fields' class='anchor'></a></h2><span id="structfield.channel_seq" class="structfield small-section-header">
+                           <a href="#structfield.channel_seq" class="anchor field"></a>
+                           <span id="channel_seq.v" class='invisible'>
+                           <code>channel_seq: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a></code>
+                           </span></span><div class='docblock'><p>Channel ID, used in API queries.</p>
+</div><span id="structfield.basic_channel_seq" class="structfield small-section-header">
+                           <a href="#structfield.basic_channel_seq" class="anchor field"></a>
+                           <span id="basic_channel_seq.v" class='invisible'>
+                           <code>basic_channel_seq: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a></code>
+                           </span></span><div class='docblock'><p>Channel ID of basic channel if this is a CHANNEL+ channel.</p>
+</div><span id="structfield.channel_code" class="structfield small-section-header">
+                           <a href="#structfield.channel_code" class="anchor field"></a>
+                           <span id="channel_code.v" class='invisible'>
+                           <code>channel_code: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code>
+                           </span></span><div class='docblock'><p>Channel code, used in URLs.</p>
+</div><span id="structfield.channel_plus_type" class="structfield small-section-header">
+                           <a href="#structfield.channel_plus_type" class="anchor field"></a>
+                           <span id="channel_plus_type.v" class='invisible'>
+                           <code>channel_plus_type: <a class="enum" href="../../../vlive/model/channel/enum.ChannelType.html" title="enum vlive::model::channel::ChannelType">ChannelType</a></code>
+                           </span></span><div class='docblock'><p>Type of channel.</p>
+</div><span id="structfield.channel_name" class="structfield small-section-header">
+                           <a href="#structfield.channel_name" class="anchor field"></a>
+                           <span id="channel_name.v" class='invisible'>
+                           <code>channel_name: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code>
+                           </span></span><div class='docblock'><p>Name of channel.</p>
+</div><span id="structfield.representative_color" class="structfield small-section-header">
+                           <a href="#structfield.representative_color" class="anchor field"></a>
+                           <span id="representative_color.v" class='invisible'>
+                           <code>representative_color: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code>
+                           </span></span><div class='docblock'><p>Color of channel.</p>
+</div><span id="structfield.channel_profile_image" class="structfield small-section-header">
+                           <a href="#structfield.channel_profile_image" class="anchor field"></a>
+                           <span id="channel_profile_image.v" class='invisible'>
+                           <code>channel_profile_image: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code>
+                           </span></span><div class='docblock'><p>Channel profile image</p>
+</div><span id="structfield.background_color" class="structfield small-section-header">
+                           <a href="#structfield.background_color" class="anchor field"></a>
+                           <span id="background_color.v" class='invisible'>
+                           <code>background_color: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code>
+                           </span></span><div class='docblock'><p>Channel background color</p>
+</div><span id="structfield.channel_cover_image" class="structfield small-section-header">
+                           <a href="#structfield.channel_cover_image" class="anchor field"></a>
+                           <span id="channel_cover_image.v" class='invisible'>
+                           <code>channel_cover_image: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code>
+                           </span></span><div class='docblock'><p>Channel color image</p>
+</div><span id="structfield.fan_count" class="structfield small-section-header">
+                           <a href="#structfield.fan_count" class="anchor field"></a>
+                           <span id="fan_count.v" class='invisible'>
+                           <code>fan_count: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a></code>
+                           </span></span><div class='docblock'><p>Number of followers</p>
+</div><span id="structfield.comment" class="structfield small-section-header">
+                           <a href="#structfield.comment" class="anchor field"></a>
+                           <span id="comment.v" class='invisible'>
+                           <code>comment: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code>
+                           </span></span><div class='docblock'><p>Description of page, usually just &quot;Welcome to {name} Channel!&quot;</p>
+</div><span id="structfield.prohibited_word_like" class="structfield small-section-header">
+                           <a href="#structfield.prohibited_word_like" class="anchor field"></a>
+                           <span id="prohibited_word_like.v" class='invisible'>
+                           <code>prohibited_word_like: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code>
+                           </span></span><div class='docblock'><p>Usually empty</p>
+</div><span id="structfield.prohibited_word_exact" class="structfield small-section-header">
+                           <a href="#structfield.prohibited_word_exact" class="anchor field"></a>
+                           <span id="prohibited_word_exact.v" class='invisible'>
+                           <code>prohibited_word_exact: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code>
+                           </span></span><div class='docblock'><p>Usually empty</p>
+</div><span id="structfield.sns_share_img" class="structfield small-section-header">
+                           <a href="#structfield.sns_share_img" class="anchor field"></a>
+                           <span id="sns_share_img.v" class='invisible'>
+                           <code>sns_share_img: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code>
+                           </span></span><div class='docblock'><p>Image used for sharing</p>
+</div><span id="structfield.banner_show_yn" class="structfield small-section-header">
+                           <a href="#structfield.banner_show_yn" class="anchor field"></a>
+                           <span id="banner_show_yn.v" class='invisible'>
+                           <code>banner_show_yn: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code>
+                           </span></span><span id="structfield.qrcode" class="structfield small-section-header">
+                           <a href="#structfield.qrcode" class="anchor field"></a>
+                           <span id="qrcode.v" class='invisible'>
+                           <code>qrcode: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code>
+                           </span></span><div class='docblock'><p>QR code that gives a link to this channel</p>
+</div><span id="structfield.upcoming_show_yn" class="structfield small-section-header">
+                           <a href="#structfield.upcoming_show_yn" class="anchor field"></a>
+                           <span id="upcoming_show_yn.v" class='invisible'>
+                           <code>upcoming_show_yn: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code>
+                           </span></span><div class='docblock'><p>If there are upcoming videos</p>
+</div>
+                    <h2 id='methods' class='small-section-header'>
+                      Methods<a href='#methods' class='anchor'></a>
+                    </h2>
+                <h3 id='impl' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="struct" href="../../../vlive/model/channel/struct.ChannelInfo.html" title="struct vlive::model::channel::ChannelInfo">ChannelInfo</a></code><a href='#impl' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/vlive/model/channel.rs.html#144-149' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.url' class="method"><span id='url.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.url' class='fnname'>url</a>(&amp;self) -&gt; <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/vlive/model/channel.rs.html#146-148' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Gets the URL to this video.</p>
+</div></div>
+            <h2 id='implementations' class='small-section-header'>
+              Trait Implementations<a href='#implementations' class='anchor'></a>
+            </h2>
+            <div id='implementations-list'>
+        <h3 id='impl-Clone' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="struct" href="../../../vlive/model/channel/struct.ChannelInfo.html" title="struct vlive::model::channel::ChannelInfo">ChannelInfo</a></code><a href='#impl-Clone' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/vlive/model/channel.rs.html#102' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class="struct" href="../../../vlive/model/channel/struct.ChannelInfo.html" title="struct vlive::model::channel::ChannelInfo">ChannelInfo</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/vlive/model/channel.rs.html#102' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
+</div><h4 id='method.clone_from' class="method"><span id='clone_from.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Self)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/clone.rs.html#117-119' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
+</div></div><h3 id='impl-Debug' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a> for <a class="struct" href="../../../vlive/model/channel/struct.ChannelInfo.html" title="struct vlive::model::channel::ChannelInfo">ChannelInfo</a></code><a href='#impl-Debug' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/vlive/model/channel.rs.html#102' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.fmt' class="method"><span id='fmt.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html" title="struct core::fmt::Formatter">Formatter</a>) -&gt; <a class="type" href="https://doc.rust-lang.org/nightly/core/fmt/type.Result.html" title="type core::fmt::Result">Result</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/vlive/model/channel.rs.html#102' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Formats the value using the given formatter. <a href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt">Read more</a></p>
+</div></div></div>
+                <h2 id='synthetic-implementations' class='small-section-header'>
+                  Auto Trait Implementations<a href='#synthetic-implementations' class='anchor'></a>
+                </h2>
+                <div id='synthetic-implementations-list'>
+            <h3 id='impl-Send' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> for <a class="struct" href="../../../vlive/model/channel/struct.ChannelInfo.html" title="struct vlive::model::channel::ChannelInfo">ChannelInfo</a></code><a href='#impl-Send' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div><h3 id='impl-Sync' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html" title="trait core::marker::Sync">Sync</a> for <a class="struct" href="../../../vlive/model/channel/struct.ChannelInfo.html" title="struct vlive::model::channel::ChannelInfo">ChannelInfo</a></code><a href='#impl-Sync' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt><kbd>?</kbd></dt>
+                    <dd>Show this help dialog</dd>
+                    <dt><kbd>S</kbd></dt>
+                    <dd>Focus the search field</dd>
+                    <dt><kbd>↑</kbd></dt>
+                    <dd>Move up in search results</dd>
+                    <dt><kbd>↓</kbd></dt>
+                    <dd>Move down in search results</dd>
+                    <dt><kbd>↹</kbd></dt>
+                    <dd>Switch tab</dd>
+                    <dt><kbd>&#9166;</kbd></dt>
+                    <dd>Go to active search result</dd>
+                    <dt><kbd>+</kbd></dt>
+                    <dd>Expand all sections</dd>
+                    <dt><kbd>-</kbd></dt>
+                    <dd>Collapse all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "vlive";
+    </script>
+    <script src="../../../main.js"></script>
+    <script defer src="../../../search-index.js"></script>
+</body>
+</html>

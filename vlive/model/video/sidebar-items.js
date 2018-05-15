@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["VideoType",""]],"struct":[["ApiListItem",""],["Bitrate",""],["Caption",""],["Captions",""],["Cover",""],["EncodingOption",""],["Key",""],["LiveStreamInfo",""],["LiveStreamResolution",""],["Share",""],["Stream",""],["Thumbnail",""],["Thumbnails",""],["User",""],["Video",""],["VideoItem",""],["VideoMeta",""],["VideoStatus",""],["Videos",""]]});
