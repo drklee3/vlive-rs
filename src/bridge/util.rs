@@ -10,7 +10,7 @@ pub fn find_video(s: &str) -> Option<VideoStatus> {
         // r#"vlive\.video\.init\((?:[) ,\n\t]*(?:"([a-zA-Z0-9_]*)"))(?:[) ,\n\t]*(?:"([a-zA-Z0-9_]*)"))(?:[) ,\n\t]*(?:"([a-zA-Z0-9_]*)"))(?:[) ,\n\t]*(?:"([a-zA-Z0-9_]*)"))(?:[) ,\n\t]*(?:"([a-zA-Z0-9_]*)"))(?:[) ,\n\t]*(?:"([a-zA-Z0-9_]*)"))(?:[) ,\n\t]*(?:"([a-zA-Z0-9_]*)"))"#
         // var oVideoStatus = (\{[\n\t"\w :,]*\})
         static ref RE: Regex =
-            Regex::new(r#"<script .*>\nvar oVideoStatus = (\{[\{}\[\]/\.?=+\n\t"\w :,]*})\n</script>"#).unwrap();
+            Regex::new(r#"<script .*>\nvar oVideoStatus = (\{[\\\{}\[\]/\.?=+\n\t"\w :,]*})\n</script>"#).unwrap();
     }
 
     // check regex matches

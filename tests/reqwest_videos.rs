@@ -14,3 +14,12 @@ fn test_get_video() {
     println!("Found video: {}", video.meta.url);
     assert!(video.meta.url == "http://vlive.tv/video/67845");
 }
+
+#[test]
+fn test_get_live_video() {
+    let client = Client::new();
+    let video = client.get_live_video(70738).unwrap();
+
+    println!("Found live video: {:?}", video);
+    assert!(video.resolutions.first().is_some());
+}

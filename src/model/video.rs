@@ -178,11 +178,11 @@ pub struct Video {
 #[serde(rename_all = "camelCase")]
 pub struct LiveStreamResolution {
     pub name: String,
-    pub width: u64,
-    pub height: u64,
+    pub width: Option<u64>,
+    pub height: Option<u64>,
     pub cdn_url: String,
-    pub quality: String,
-    pub stream: String,
+    pub quality: Option<String>,
+    pub stream: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
