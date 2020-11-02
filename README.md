@@ -2,6 +2,4 @@
 
 # VLive-rs
 
-Unofficial Rust crate for VLive API.
-
-Still in progress.
+Unofficial Rust wrapper for VLive API.

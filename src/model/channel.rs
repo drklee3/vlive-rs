@@ -1,8 +1,6 @@
-use chrono::{
-    DateTime,
-    offset::FixedOffset,
-};
-use model::helpers::*;
+use crate::model::helpers::*;
+use chrono::{offset::FixedOffset, DateTime};
+use serde::Deserialize;
 
 /// Type of channel, basic or CHANNEL+
 #[derive(Deserialize, Clone, Debug)]
@@ -17,85 +15,19 @@ pub enum ChannelType {
 #[derive(Deserialize, Clone, Debug)]
 pub struct ChannelList(pub Vec<ChannelListItem>);
 
-impl ChannelList {
-    /// Searches for a channel by name.  This is case insensitive.
-    pub fn find_channel<T: AsRef<str>>(&self, search: T) -> Option<ChannelListItem> {
-        self.0
-            .iter()
-            .find(|chan|
-                chan.name.to_lowercase() == search
-                    .as_ref()
-                    .to_string()
-                    .to_lowercase()
-            )
-            .cloned()
-    }
-    /// Searches for a channel by name, but returns the first one with a partial match.  This is case insensitive.
-    pub fn find_partial_channel<T: AsRef<str>>(&self, search: T) -> Option<ChannelListItem> {
-        self.0
-            .iter()
-            .find(|chan|
-                chan.name.to_lowercase().contains(
-                    &search
-                        .as_ref()
-                        .to_string()
-                        .to_lowercase()
-                )
-            )
-            .cloned()
-    }
-
-    /// Same as `find_partial_channel` but also checks if the channel code matches.
-    pub fn find_partial_channel_or_code<T: AsRef<str>>(&self, search: T) -> Option<ChannelListItem> {
-        self.0
-            .iter()
-            .find(|chan| {
-                chan.name.to_lowercase().contains(
-                    &search
-                        .as_ref()
-                        .to_string()
-                        .to_lowercase()
-                ) || if let Some(ref code) = chan.code {
-                    // search if code matches
-                    code.to_lowercase() == search
-                        .as_ref()
-                        .to_string()
-                        .to_lowercase()
-                } else {
-                    false
-                }
-            })
-            .cloned()
-    }
-    /// Searches for all channels that contain a string.  This is case insensitive.
-    pub fn find_channels<T: AsRef<str>>(&self, search: T) -> Vec<ChannelListItem> {
-        let mut found = self.0.clone();
-        found.retain(|chan|
-            chan.name.to_lowercase().contains(
-                &search
-                    .as_ref()
-                    .to_string()
-                    .to_lowercase()
-            )
-        );
-
-        found
-    }
-}
-
 /// Channel Item return in list of all available channels
 #[derive(Deserialize, Clone, Debug)]
 pub struct ChannelListItem {
     /// Name of channel
-    pub name: String,           // "BTS",
+    pub name: String, // "BTS",
     /// Icon URl for channel
-	pub icon: String,           // "http://v.phinf.naver.net/20180406_39/1522940433294kxJHw_PNG/profile13_15775.png?type=round58_58",
-	
+    pub icon: String, // "http://v.phinf.naver.net/20180406_39/1522940433294kxJHw_PNG/profile13_15775.png?type=round58_58",
+
     /// Type of channel
     #[serde(rename = "type")]
-    pub channel_type: ChannelType,      // "BASIC",
+    pub channel_type: ChannelType, // "BASIC",
     /// Channel code used in URLs
-	pub code: Option<String>,           // "FE619"
+    pub code: Option<String>, // "FE619"
 }
 
 /// Information on a channel
@@ -132,13 +64,13 @@ pub struct ChannelInfo {
     pub sns_share_img: String,
 
     #[serde(deserialize_with = "bool_from_str")]
-    pub banner_show_yn: bool,             //  "N"
+    pub banner_show_yn: bool, //  "N"
     /// QR code that gives a link to this channel
     pub qrcode: String,
 
     /// If there are upcoming videos
     #[serde(deserialize_with = "bool_from_str")]
-    pub upcoming_show_yn: bool,           //  "N"
+    pub upcoming_show_yn: bool, //  "N"
 }
 
 impl ChannelInfo {
@@ -152,60 +84,60 @@ impl ChannelInfo {
 #[serde(rename_all = "camelCase")]
 pub struct VideoListItem {
     /// The ID of the video, used in the URL.
-    pub video_seq: u32,                      //  57788
+    pub video_seq: u32, //  57788
     /// Type of video, either VOD or LIVE
-    pub video_type: String,                  //  "VOD"
+    pub video_type: String, //  "VOD"
     /// Title of the video.
-    pub title: String,                       //  "[1년 전 오늘의 TWICE] 지효야 1년 …’s birthday a year ago)"
+    pub title: String, //  "[1년 전 오늘의 TWICE] 지효야 1년 …’s birthday a year ago)"
     /// Number of plays this video has.
-    pub play_count: u32,                     //  46169
+    pub play_count: u32, //  46169
     /// Number of likes or hearts this video has.
-    pub like_count: u32,                     //  1387373
+    pub like_count: u32, //  1387373
     /// Number of comments this video has.
-    pub comment_count: u32,                  //  6179
+    pub comment_count: u32, //  6179
     /// The thumbnail URL for this video.
-    pub thumbnail: String,                   //  "http://v.phinf.naver.net…6_20.%BD%BA%C6%BF002.jpg"
-    pub pick_sort_order: u32,                //  0
+    pub thumbnail: String, //  "http://v.phinf.naver.net…6_20.%BD%BA%C6%BF002.jpg"
+    pub pick_sort_order: u32, //  0
     /// Screen orientation of this video, either `HORIZONTAL` or `VERTICAL`
-    pub screen_orientation: String,          //  "HORIZONTAL"
+    pub screen_orientation: String, //  "HORIZONTAL"
 
     /// Upload date of this video(?)  This video may not have been visible at this point.
     #[serde(deserialize_with = "timestamp_from_str")]
-    pub will_start_at: DateTime<FixedOffset>,               //  "2018-02-01 20:39:00"
+    pub will_start_at: DateTime<FixedOffset>, //  "2018-02-01 20:39:00"
 
     /// End time of this video, usually sometime in 2099 so this isn't really useful.
     #[serde(deserialize_with = "timestamp_from_str")]
-    pub will_end_at: DateTime<FixedOffset>,                 //  "2099-12-31 23:59:59"
-    
+    pub will_end_at: DateTime<FixedOffset>, //  "2099-12-31 23:59:59"
+
     #[serde(default)]
     #[serde(deserialize_with = "option_timestamp_from_str")]
-    pub created_at: Option<DateTime<FixedOffset>>,          //  "2018-04-06 13:35:09"
-    pub upcoming_yn: String,                 //  "N"
+    pub created_at: Option<DateTime<FixedOffset>>, //  "2018-04-06 13:35:09"
+    pub upcoming_yn: String, //  "N"
 
     /// If this is a "special" live video.
     #[serde(deserialize_with = "bool_from_str")]
-    pub special_live_yn: bool,               //  "N"
+    pub special_live_yn: bool, //  "N"
 
     /// If this video has a live thumbnail.
     #[serde(deserialize_with = "bool_from_str")]
-    pub live_thumb_yn: bool,                 //  "N"
+    pub live_thumb_yn: bool, //  "N"
     /// VLIVE+ product ID if this is a VLIVE+ video, otherwise it's empty.
-    pub product_id: String,                  //  ""
+    pub product_id: String, //  ""
     /// VLIVE+ package ID if this is a VLIVE+ video, otherwise it's empty.
-    pub package_product_id: String,          //  ""
+    pub package_product_id: String, //  ""
     /// If this is a VLIVE+ product video.
-    pub product_type: String,                //  "NONE" / "PAID"
+    pub product_type: String, //  "NONE" / "PAID"
     /// Duration of the video in seconds.
-    pub play_time: u32,                      //  199
+    pub play_time: u32, //  199
 
     /// If this is a basic or CHANNEL+ video
     #[serde(deserialize_with = "bool_from_str")]
-    pub channel_plus_public_yn: bool,        //  "N"
-    pub expose_status: String,               //  "EXPOSED"
-    
+    pub channel_plus_public_yn: bool, //  "N"
+    pub expose_status: String, //  "EXPOSED"
+
     /// Date when this video was available.
     #[serde(deserialize_with = "timestamp_from_str")]
-    pub on_air_start_at: DateTime<FixedOffset>,             //  "2018-02-01 20:44:00"
+    pub on_air_start_at: DateTime<FixedOffset>, //  "2018-02-01 20:44:00"
 }
 
 impl VideoListItem {
@@ -243,7 +175,7 @@ pub struct ChannelVideoList {
     /// Information about this channel
     pub channel_info: ChannelInfo,
     /// Total videos this channel has.
-    pub total_video_count: u32,           //  724
+    pub total_video_count: u32, //  724
     /// List of videos
     pub video_list: Vec<VideoListItem>,
 }
@@ -252,4 +184,18 @@ pub struct ChannelVideoList {
 #[derive(Deserialize, Clone, Debug)]
 pub(crate) struct ChannelVideoListResult {
     pub result: ChannelVideoList,
+}
+
+/// Decoded channel code to channel seq
+#[derive(Deserialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct DecodeChannelCode {
+    pub channel_seq: u64,
+    pub channel_code: String,
+}
+
+/// Wrapper for decoded channel code
+#[derive(Deserialize, Clone, Debug)]
+pub(crate) struct DecodeChannelCodeResult {
+    pub result: DecodeChannelCode,
 }
