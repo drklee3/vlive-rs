@@ -6,7 +6,11 @@ async fn test_search_channel() {
     let client = Client::new();
 
     let channels = client.search_channel("bts".into(), 10).await.unwrap();
-    let channel = channels.0.first().unwrap();
+    let channel = channels
+        .0
+        .iter()
+        .find(|c| c.code == Some("FE619".into()))
+        .expect("Channel missing");
 
     println!("Found Channel: {:?}", &channel);
     assert!(channel.code == Some("FE619".into()));
@@ -26,7 +30,10 @@ async fn test_get_channel_video_list() {
     let client = Client::new();
     let channel = client.get_channel_video_list(364, 30, 1).await.unwrap();
 
-    println!("Found Channel: {}, {} videos", channel.channel_info.channel_name, channel.total_video_count);
+    println!(
+        "Found Channel: {}, {} videos",
+        channel.channel_info.channel_name, channel.total_video_count
+    );
     assert!(channel.channel_info.channel_name == "BTS+");
     // Requested enough videos, should definitely have more than 30 videos total
     // so this should be 30 since we requested 30 videos

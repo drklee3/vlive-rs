@@ -19,6 +19,7 @@ pub use error::Error;
 
 use error::Result;
 use model::channel;
+use model::recent_video::RecentVideo;
 use model::video;
 use model::video::VideoStatus;
 
@@ -53,6 +54,7 @@ pub trait VLiveRequester {
         page_no: u32,
     ) -> Result<channel::ChannelUpcomingVideoList>;
 
+    async fn get_recent_videos(&self) -> Result<Vec<RecentVideo>>;
     async fn get_video(&self, video_seq: u32) -> Result<video::Video>;
 
     async fn get_live_video(&self, video_seq: u32) -> Result<video::LiveStreamInfo>;
@@ -121,6 +123,16 @@ impl VLiveRequester for Client {
             .await
             .map(|r| r.result)
             .map_err(From::from)
+    }
+
+    async fn get_recent_videos(&self) -> Result<Vec<RecentVideo>> {
+        self.get("https://www.vlive.tv/home/video/more?pageNo=1&pageSize=12&viewType=recent")
+            .send()
+            .await?
+            .text()
+            .await
+            .map_err(From::from)
+            .and_then(|text| RecentVideo::from_html(&text))
     }
 
     async fn get_video(&self, video_seq: u32) -> Result<video::Video> {
