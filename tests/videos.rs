@@ -4,7 +4,7 @@ use vlive::VLiveRequester;
 #[tokio::test]
 async fn test_get_recent_videos() {
     let client = Client::new();
-    let videos = client.get_recent_videos().await.unwrap();
+    let videos = client.get_recent_videos(12, 1).await.unwrap();
 
     println!("Found live videos: {:#?}", videos);
     assert!(!videos.is_empty());

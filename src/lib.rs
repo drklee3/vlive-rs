@@ -54,7 +54,7 @@ pub trait VLiveRequester {
         page_no: u32,
     ) -> Result<channel::ChannelUpcomingVideoList>;
 
-    async fn get_recent_videos(&self) -> Result<Vec<RecentVideo>>;
+    async fn get_recent_videos(&self, page_size: u64, page_no: u64) -> Result<Vec<RecentVideo>>;
     async fn get_video(&self, video_seq: u32) -> Result<video::Video>;
 
     async fn get_live_video(&self, video_seq: u32) -> Result<video::LiveStreamInfo>;
@@ -125,8 +125,13 @@ impl VLiveRequester for Client {
             .map_err(From::from)
     }
 
-    async fn get_recent_videos(&self) -> Result<Vec<RecentVideo>> {
-        self.get("https://www.vlive.tv/home/video/more?pageNo=1&pageSize=12&viewType=recent")
+    /// Fetches new videos from any channel (equivalent to the new section on the homepage)
+    async fn get_recent_videos(&self, page_size: u64, page_no: u64) -> Result<Vec<RecentVideo>> {
+        self.get("https://www.vlive.tv/home/video/more")
+            .query(&[
+                ("pageNo", &page_no.to_string()),
+                ("pageSize", &page_size.to_string()),
+            ])
             .send()
             .await?
             .text()
