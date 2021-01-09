@@ -1,7 +1,7 @@
 use scraper::{Html, Selector};
 use serde::{de, Deserialize, Deserializer};
-use std::collections::HashMap;
 use std::borrow::Cow;
+use std::collections::HashMap;
 use std::result::Result as StdResult;
 
 use super::channel::ChannelType;
@@ -23,16 +23,19 @@ pub struct RecentVideo {
     pub channel_seq: u64,
     pub channel_url: String,
     pub channel_type: ChannelType,
-    pub thumbnail_url: String,
+    pub thumbnail_url: Option<String>,
 
-    #[serde(deserialize_with = "u64_from_duration_str")]
-    pub duration_secs: u64,
+    /// None if this is live
+    #[serde(default, deserialize_with = "u64_from_duration_str")]
+    pub duration_secs: Option<u64>,
 
-    #[serde(deserialize_with = "u64_from_str")]
-    pub plays: u64,
+    /// May be missing for some videos
+    #[serde(default, deserialize_with = "some_u64_from_str")]
+    pub plays: Option<u64>,
 
-    #[serde(deserialize_with = "u64_from_str")]
-    pub likes: u64,
+    /// May be missing for some videos
+    #[serde(default, deserialize_with = "some_u64_from_str")]
+    pub likes: Option<u64>,
 }
 
 impl RecentVideo {
@@ -56,8 +59,12 @@ impl RecentVideo {
                         "data-ga-type" => video_attrs.insert("type", Cow::from(attr_value)),
                         "data-ga-name" => video_attrs.insert("title", Cow::from(attr_value)),
                         "data-ga-cseq" => video_attrs.insert("channel_seq", Cow::from(attr_value)),
-                        "data-ga-cname" => video_attrs.insert("channel_name", Cow::from(attr_value)),
-                        "data-ga-ctype" => video_attrs.insert("channel_type", Cow::from(attr_value)),
+                        "data-ga-cname" => {
+                            video_attrs.insert("channel_name", Cow::from(attr_value))
+                        }
+                        "data-ga-ctype" => {
+                            video_attrs.insert("channel_type", Cow::from(attr_value))
+                        }
                         _ => continue,
                     };
                 }
@@ -124,10 +131,8 @@ impl RecentVideo {
 
             let val = serde_json::to_value(&video_attrs)?;
             let video: RecentVideo = serde_json::from_value(val)?;
-            dbg!(&video);
 
             videos.push(video);
-
         }
 
         Ok(videos)
@@ -135,29 +140,44 @@ impl RecentVideo {
 }
 
 pub fn u64_from_str<'de, D>(deserializer: D) -> StdResult<u64, D::Error>
-where D: Deserializer<'de> {
+where
+    D: Deserializer<'de>,
+{
     let s: String = Deserialize::deserialize(deserializer)?;
     s.replace(",", "").parse::<u64>().map_err(de::Error::custom)
 }
 
-pub fn u64_from_duration_str<'de, D>(deserializer: D) -> StdResult<u64, D::Error>
-where D: Deserializer<'de> {
-    let s: String = Deserialize::deserialize(deserializer)?;
+pub fn some_u64_from_str<'de, D>(deserializer: D) -> StdResult<Option<u64>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    u64_from_str(deserializer).map(|num| Some(num))
+}
 
-    let mut seconds = 0;
+pub fn u64_from_duration_str<'de, D>(deserializer: D) -> StdResult<Option<u64>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let s: Option<String> = Deserialize::deserialize(deserializer)?;
 
-    for (i, chunk) in s.split(':').rev().enumerate() {
-        let seconds_multi = match i {
-            0 => 1,
-            1 => 60,
-            // Hours
-            2 => 60 * 60,
-            // Days, shouldn't be another one after this
-            _ => 60 * 60 * 24,
-        };
+    if let Some(s) = s {
+        let mut seconds = 0;
 
-        seconds += chunk.parse::<u64>().map_err(de::Error::custom)? * seconds_multi;
+        for (i, chunk) in s.split(':').rev().enumerate() {
+            let seconds_multi = match i {
+                0 => 1,
+                1 => 60,
+                // Hours
+                2 => 60 * 60,
+                // Days, shouldn't be another one after this
+                _ => 60 * 60 * 24,
+            };
+
+            seconds += chunk.parse::<u64>().map_err(de::Error::custom)? * seconds_multi;
+        }
+
+        Ok(Some(seconds))
+    } else {
+        Ok(None)
     }
-
-    Ok(seconds)
 }

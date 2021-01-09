@@ -120,7 +120,7 @@ pub struct Stream {
     /// Type of stream, usually `HLS`
     #[serde(rename = "type")]
     pub type_: String, // "HLS",
-    pub key: Key,
+    pub key: Option<Key>,
     /// m3u8 URL for streaming
     pub source: String, // "http://globalv.p.naverrmc.edgesuite.net/global/read/global_v_2018_02_01_4/hls/f4740c94-0734-11e8-8062-0000000041ed.m3u8"
 }
@@ -195,22 +195,168 @@ pub struct LiveStreamInfo {
     pub resolutions: Vec<LiveStreamResolution>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "camelCase")]
-pub struct VideoStatus {
-    pub video_seq: u64,
-    pub status: String,
-    pub vid: Option<String>,
-    pub inkey: Option<String>,
-    pub live_stream_info: Option<String>,
-    pub disable_ad: bool,
-    pub start_time: u64,
-    pub view_type: String,
+#[derive(Debug, Serialize, Deserialize)]
+pub struct VideoKey {
+    pub inkey: String,
+    // adParams field ignored
 }
 
-impl VideoStatus {
-    /// If this video has video id and key
-    pub fn has_vid_key(&self) -> bool {
-        self.vid.is_some() && self.inkey.is_some()
-    }
+#[serde(rename_all = "camelCase")]
+#[derive(Debug, Serialize, Deserialize)]
+pub struct VideoState {
+    pub post_detail: PostDetail,
+    pub channel: VideoStateChannel,
+    pub schedule_detail: Member,
+    pub member: Member,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct VideoStateChannel {
+    pub channel: ChannelChannel,
+    pub on_loading: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ChannelChannel {
+    pub channel_code: String,
+    pub channel_name: String,
+    pub representative_color: String,
+    pub background_color: String,
+    pub channel_profile_image: String,
+    pub channel_cover_image: String,
+    pub channel_description: String,
+    pub prohibited_word_like_list: Vec<Option<serde_json::Value>>,
+    pub prohibited_word_exact_list: Vec<Option<serde_json::Value>>,
+    pub sns_share_img: String,
+    pub qr_code: String,
+    pub open_at: i64,
+    pub show_upcoming: bool,
+    pub use_member_level: bool,
+    pub member_count: i64,
+    pub post_count_of_star: i64,
+    pub video_count_of_star: i64,
+    pub video_play_count_of_star: i64,
+    pub video_like_count_of_star: i64,
+    pub video_comment_count_of_star: i64,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Member {
+    pub on_loading: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PostDetail {
+    pub post: PostDetailPost,
+    pub on_loading: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PostDetailPost {
+    pub attachments: Attachments,
+    pub url: String,
+    pub title: String,
+    pub board_id: i64,
+    pub created_at: i64,
+    pub channel_code: String,
+    pub available_actions: Vec<String>,
+    pub comment_count: i64,
+    pub emotion_count: i64,
+    pub post_id: String,
+    pub is_comment_enabled: bool,
+    pub is_hidden_from_star: bool,
+    pub author_id: String,
+    pub post_version: String,
+    pub is_viewer_bookmarked: bool,
+    pub official_video: OfficialVideo,
+    pub content_type: String,
+    pub author: Author,
+    pub channel: PurpleChannel,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Attachments {
+    pub video_count: i64,
+    pub photo_count: i64,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Author {
+    pub member_id: String,
+    pub channel_code: String,
+    pub joined: bool,
+    pub nickname: String,
+    pub profile_image_url: String,
+    pub official_profile_type: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PurpleChannel {
+    pub channel_code: String,
+    pub channel_name: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct OfficialVideo {
+    // pub video_seq: i64,
+    // pub official_video_type: String,
+    // pub title: String,
+    // pub multinational_titles: Vec<String>,
+    // pub play_count: i64,
+    // pub like_count: i64,
+    // pub comment_count: i64,
+    // pub thumb: String,
+    // pub expose_status: String,
+    // pub screen_orientation: String,
+    // pub will_start_at: i64,
+    // pub on_air_start_at: i64,
+    // pub will_end_at: i64,
+    // pub created_at: i64,
+    // pub live_thumb_yn: bool,
+    // pub upcoming_yn: bool,
+    // pub product_type: String,
+    // pub pre_ad_yn: bool,
+    // pub post_ad_yn: bool,
+    // pub mobile_da_yn: bool,
+    // pub vr_content_type: String,
+    // pub badges: Vec<String>,
+    // pub light_sticks: Vec<LightStick>,
+    // pub has_moment: bool,
+    // pub recommended_videos: Vec<RecommendedVideo>,
+    pub schema_version: String,
+    pub momentable: bool,
+    pub vod_id: String,
+    pub play_time: i64,
+    pub encoding_status: String,
+    pub vod_secure_status: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LightStick {
+    pub stick_seq: i64,
+    pub product_id: String,
+    pub title: String,
+    pub effect_phrase: String,
+    pub like_count: i64,
+    pub image: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MultinationalTitle {
+    pub multinational_title_type: String,
+    pub seq: i64,
+    pub locale: String,
+    pub label: String,
+    pub default_yn: Option<bool>,
 }

@@ -41,6 +41,36 @@ async fn test_get_channel_video_list() {
 }
 
 #[tokio::test]
+async fn test_get_grouped_boards() {
+    let client = Client::new();
+    let grouped_boards = client
+        .get_channel_grouped_boards("EDBF".into())
+        .await
+        .unwrap();
+
+    println!("Found grouped_boards: {:#?}", grouped_boards);
+    assert!(!grouped_boards.is_empty());
+}
+
+#[tokio::test]
+async fn test_get_board() {
+    let client = Client::new();
+    let board = client.get_channel_board("EDBF".into(), 21).await.unwrap();
+
+    println!("Found board: {:#?}", board);
+    assert_eq!(board.title, "Notice".to_string());
+}
+
+#[tokio::test]
+async fn test_get_board_posts() {
+    let client = Client::new();
+    let posts = client.get_board_posts("EDBF".into(), 21).await.unwrap();
+
+    println!("Found board posts: {:#?}", posts);
+    assert!(!posts.data.is_empty());
+}
+
+#[tokio::test]
 async fn test_video_item() {
     let client = Client::new();
     let video_list = client
