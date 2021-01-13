@@ -30,6 +30,16 @@ pub struct ChannelListItem {
     pub code: Option<String>, // "FE619"
 }
 
+// https://www.vlive.tv/globalv-web/vam-web/vhs/store/v1.0/channels/{}
+#[derive(Deserialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct ChannelBasicInfo {
+    pub profile_img: String,
+    pub name: String,
+    pub latest_updated_at: i64,
+    pub channel_code: String,
+}
+
 /// Information on a channel
 #[derive(Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]

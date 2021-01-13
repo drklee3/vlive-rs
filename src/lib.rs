@@ -39,6 +39,7 @@ macro_rules! api {
 #[async_trait]
 pub trait VLiveRequester {
     async fn search_channel(&self, query: String, num_rows: u64) -> Result<channel::ChannelList>;
+    async fn get_channel_info(&self, channel_code: String) -> Result<channel::ChannelBasicInfo>;
 
     async fn decode_channel_code(&self, channel_code: String) -> Result<u64>;
     async fn get_channel_grouped_boards(&self, channel_code: String) -> Result<GroupedBoards>;
@@ -71,6 +72,19 @@ impl VLiveRequester for Client {
             .send()
             .await?
             .json::<channel::ChannelList>()
+            .await
+            .map_err(From::from)
+    }
+
+    async fn get_channel_info(&self, channel_code: String) -> Result<channel::ChannelBasicInfo> {
+        self.get(&endpoints::channel_info_url(&channel_code))
+            .header(
+                reqwest::header::REFERER,
+                (format!("https://www.vlive.tv/channel/{}", channel_code)),
+            )
+            .send()
+            .await?
+            .json::<channel::ChannelBasicInfo>()
             .await
             .map_err(From::from)
     }

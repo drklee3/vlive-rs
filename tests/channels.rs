@@ -17,6 +17,16 @@ async fn test_search_channel() {
 }
 
 #[tokio::test]
+async fn test_get_channel_info() {
+    let client = Client::new();
+
+    let channel = client.get_channel_info("FE619".into()).await.unwrap();
+
+    assert!(channel.channel_code == "FE619");
+    assert!(channel.name == "BTS");
+}
+
+#[tokio::test]
 async fn test_decode_channel_code() {
     let client = Client::new();
 

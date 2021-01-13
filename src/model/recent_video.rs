@@ -21,7 +21,7 @@ pub struct RecentVideo {
 
     #[serde(deserialize_with = "u64_from_str")]
     pub channel_seq: u64,
-    pub channel_url: String,
+    pub channel_code: String,
     pub channel_type: ChannelType,
     pub thumbnail_url: Option<String>,
 
@@ -101,14 +101,14 @@ impl RecentVideo {
                 video_attrs.insert("posted_age", Cow::from(age));
             }
 
-            // Channel URL
+            // Channel code
             if let Some(url) = video_element
                 .select(&Selector::parse("div.video_date > a.name").unwrap())
                 .nth(0)
                 .map(|c| c.value())
                 .and_then(|e| e.attr("href"))
             {
-                video_attrs.insert("channel_url", Cow::from(url));
+                video_attrs.insert("channel_code", Cow::from(url.replace("/channel/", "")));
             }
 
             // Plays
@@ -136,6 +136,10 @@ impl RecentVideo {
         }
 
         Ok(videos)
+    }
+
+    pub fn channel_url(&self) -> String {
+        format!("https://www.vlive.tv/channel/{}", self.channel_code)
     }
 }
 
