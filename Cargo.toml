@@ -15,10 +15,7 @@ regex = "^0.2"
 lazy_static = "^1.0.0"
 async-trait = "0.1.41"
 scraper = "0.12.0"
-
-[dependencies.reqwest]
-version = "^0.10"
-features = ["json"]
+reqwest = { version = "0.10", features = [ "json" ] }
 
 [dependencies.chrono]
 version = "^0.4"

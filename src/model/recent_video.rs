@@ -51,7 +51,7 @@ impl RecentVideo {
             // Basic metadata from thumbnail
             if let Some(e) = video_element
                 .select(&Selector::parse("a.thumb_area").unwrap())
-                .nth(0)
+                .next()
             {
                 for (attr_name, attr_value) in e.value().attrs() {
                     match attr_name {
@@ -73,7 +73,7 @@ impl RecentVideo {
             // Video duration
             if let Some(d) = video_element
                 .select(&Selector::parse("span.time").unwrap())
-                .nth(0)
+                .next()
                 .and_then(|e| e.last_child())
                 .map(|c| c.value())
                 .and_then(|v| v.as_text())
@@ -85,7 +85,7 @@ impl RecentVideo {
             // Video thumbnail url
             if let Some(url) = video_element
                 .select(&Selector::parse("img").unwrap())
-                .nth(0)
+                .next()
                 .map(|c| c.value())
                 .and_then(|e| e.attr("src"))
             {
@@ -95,7 +95,7 @@ impl RecentVideo {
             // When posted
             if let Some(age) = video_element
                 .select(&Selector::parse("div.video_date > span.date").unwrap())
-                .nth(0)
+                .next()
                 .map(|c| c.inner_html())
             {
                 video_attrs.insert("posted_age", Cow::from(age));
@@ -104,7 +104,7 @@ impl RecentVideo {
             // Channel code
             if let Some(url) = video_element
                 .select(&Selector::parse("div.video_date > a.name").unwrap())
-                .nth(0)
+                .next()
                 .map(|c| c.value())
                 .and_then(|e| e.attr("href"))
             {
@@ -114,7 +114,7 @@ impl RecentVideo {
             // Plays
             if let Some(plays) = video_element
                 .select(&Selector::parse("div.video_info > span.play > span").unwrap())
-                .nth(0)
+                .next()
                 .map(|c| c.inner_html())
             {
                 video_attrs.insert("plays", Cow::from(plays));
@@ -123,7 +123,7 @@ impl RecentVideo {
             // Likes
             if let Some(likes) = video_element
                 .select(&Selector::parse("div.video_info > span.like > span").unwrap())
-                .nth(0)
+                .next()
                 .map(|c| c.inner_html())
             {
                 video_attrs.insert("likes", Cow::from(likes));
@@ -155,7 +155,7 @@ pub fn some_u64_from_str<'de, D>(deserializer: D) -> StdResult<Option<u64>, D::E
 where
     D: Deserializer<'de>,
 {
-    u64_from_str(deserializer).map(|num| Some(num))
+    u64_from_str(deserializer).map(Some)
 }
 
 pub fn u64_from_duration_str<'de, D>(deserializer: D) -> StdResult<Option<u64>, D::Error>

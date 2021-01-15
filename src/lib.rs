@@ -38,13 +38,13 @@ macro_rules! api {
 
 #[async_trait]
 pub trait VLiveRequester {
-    async fn search_channel(&self, query: String, num_rows: u64) -> Result<channel::ChannelList>;
-    async fn get_channel_info(&self, channel_code: String) -> Result<channel::ChannelBasicInfo>;
+    async fn search_channel(&self, query: &str, num_rows: u64) -> Result<channel::ChannelList>;
+    async fn get_channel_info(&self, channel_code: &str) -> Result<channel::ChannelBasicInfo>;
 
-    async fn decode_channel_code(&self, channel_code: String) -> Result<u64>;
-    async fn get_channel_grouped_boards(&self, channel_code: String) -> Result<GroupedBoards>;
-    async fn get_channel_board(&self, channel_code: String, board_id: u64) -> Result<Board>;
-    async fn get_board_posts(&self, channel_code: String, board_id: u64) -> Result<BoardPosts>;
+    async fn decode_channel_code(&self, channel_code: &str) -> Result<u64>;
+    async fn get_channel_grouped_boards(&self, channel_code: &str) -> Result<GroupedBoards>;
+    async fn get_channel_board(&self, channel_code: &str, board_id: u64) -> Result<Board>;
+    async fn get_board_posts(&self, channel_code: &str, board_id: u64) -> Result<BoardPosts>;
 
     async fn get_channel_video_list(
         &self,
@@ -66,9 +66,10 @@ pub trait VLiveRequester {
 
 #[async_trait]
 impl VLiveRequester for Client {
-    async fn search_channel(&self, query: String, num_rows: u64) -> Result<channel::ChannelList> {
+    /// Search for a channel by name
+    async fn search_channel(&self, query: &str, num_rows: u64) -> Result<channel::ChannelList> {
         self.get("http://www.vlive.tv/search/auto/channels")
-            .query(&[("query", &query), ("maxNumOfRows", &num_rows.to_string())])
+            .query(&[("query", query), ("maxNumOfRows", &num_rows.to_string())])
             .send()
             .await?
             .json::<channel::ChannelList>()
@@ -76,7 +77,8 @@ impl VLiveRequester for Client {
             .map_err(From::from)
     }
 
-    async fn get_channel_info(&self, channel_code: String) -> Result<channel::ChannelBasicInfo> {
+    /// Get basic information about a channel
+    async fn get_channel_info(&self, channel_code: &str) -> Result<channel::ChannelBasicInfo> {
         self.get(&endpoints::channel_info_url(&channel_code))
             .header(
                 reqwest::header::REFERER,
@@ -89,7 +91,7 @@ impl VLiveRequester for Client {
             .map_err(From::from)
     }
 
-    async fn decode_channel_code(&self, channel_code: String) -> Result<u64> {
+    async fn decode_channel_code(&self, channel_code: &str) -> Result<u64> {
         self.get(api!("decodeChannelCode"))
             .query(&[("app_id", APP_ID), ("channelCode", &channel_code)])
             .send()
@@ -100,7 +102,8 @@ impl VLiveRequester for Client {
             .map_err(From::from)
     }
 
-    async fn get_channel_grouped_boards(&self, channel_code: String) -> Result<GroupedBoards> {
+    /// Get a channel's boards, grouped into different categories
+    async fn get_channel_grouped_boards(&self, channel_code: &str) -> Result<GroupedBoards> {
         self.get(&endpoints::grouped_boards_url(&channel_code))
             .header(
                 reqwest::header::REFERER,
@@ -115,7 +118,7 @@ impl VLiveRequester for Client {
 
     /// Gets a channel's board info. Note that this doesn't include the actual board posts
     /// Channel code is required since the referer requires the channel board URL
-    async fn get_channel_board(&self, channel_code: String, board_id: u64) -> Result<Board> {
+    async fn get_channel_board(&self, channel_code: &str, board_id: u64) -> Result<Board> {
         self.get(&endpoints::board_url(board_id))
             .header(
                 reqwest::header::REFERER,
@@ -131,7 +134,8 @@ impl VLiveRequester for Client {
             .map_err(From::from)
     }
 
-    async fn get_board_posts(&self, channel_code: String, board_id: u64) -> Result<BoardPosts> {
+    /// Get the posts in a given board
+    async fn get_board_posts(&self, channel_code: &str, board_id: u64) -> Result<BoardPosts> {
         self.get(&endpoints::board_posts_url(board_id))
             .header(
                 reqwest::header::REFERER,
@@ -204,6 +208,7 @@ impl VLiveRequester for Client {
             .and_then(|text| RecentVideo::from_html(&text))
     }
 
+    /// Get detailed information about a given video
     async fn get_video(&self, video_seq: u64) -> Result<video::Video> {
         let video_url = endpoints::video_url(video_seq);
 
