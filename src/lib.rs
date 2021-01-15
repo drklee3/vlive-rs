@@ -253,7 +253,7 @@ pub fn find_video(s: &str) -> Result<video::VideoState> {
     // Yes I know regex shouldn't be used for html parsing, but it's kind of just in a JS script in html weird
     lazy_static! {
         static ref RE: Regex =
-            Regex::new(r#"window\.__PRELOADED_STATE__\s*=([^<]*)</script>"#).unwrap();
+            Regex::new(r#"window\.__PRELOADED_STATE__\s*=([^<]*),\s*function"#).unwrap();
     }
 
     // check regex matches
