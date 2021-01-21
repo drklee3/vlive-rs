@@ -10,14 +10,40 @@ async fn test_get_recent_videos() {
     assert!(!videos.is_empty());
 }
 
-// Not updated to new vlive site yet
 #[tokio::test]
 async fn test_get_video() {
     let client = Client::new();
     let video = client.get_video(232024).await.unwrap();
 
+    println!("Found video: {:?}", video);
+    assert_eq!(video.post_detail.get_detail().url, "https://www.vlive.tv/post/1-20783092");
+}
+
+#[tokio::test]
+async fn test_get_video_chplus() {
+    let client = Client::new();
+    let video = client.get_video(233176).await.unwrap();
+
+    println!("Found video: {:?}", video);
+    assert_eq!(video.post_detail.get_detail().url, "https://www.vlive.tv/post/0-20890974");
+}
+
+#[tokio::test]
+async fn test_get_video_streams() {
+    let client = Client::new();
+    let video = client.get_video_streams(232024).await.unwrap();
+
     println!("Found video: {}", video.meta.url);
-    assert!(video.meta.url == "http://vlive.tv/video/232024");
+    assert_eq!(video.meta.url, "http://vlive.tv/video/232024");
+}
+
+#[tokio::test]
+async fn test_get_video_streams_chplus() {
+    let client = Client::new();
+    let video = client.get_video_streams(233176).await.unwrap();
+
+    println!("Found video: {:?}", video);
+    assert_eq!(video.meta.url, "http://vlive.tv/video/233176");
 }
 
 // ignore this test as needs a video that's live to pass

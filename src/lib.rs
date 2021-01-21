@@ -24,7 +24,7 @@ use model::{
     channel,
     grouped_board::{Board, GroupedBoards},
     recent_video::RecentVideo,
-    video
+    video,
 };
 
 macro_rules! api {
@@ -61,7 +61,8 @@ pub trait VLiveRequester {
     ) -> Result<channel::ChannelUpcomingVideoList>;
 
     async fn get_recent_videos(&self, page_size: u64, page_no: u64) -> Result<Vec<RecentVideo>>;
-    async fn get_video(&self, video_seq: u64) -> Result<video::Video>;
+    async fn get_video(&self, video_seq: u64) -> Result<video::VideoState>;
+    async fn get_video_streams(&self, video_seq: u64) -> Result<video::Video>;
 }
 
 #[async_trait]
@@ -208,32 +209,26 @@ impl VLiveRequester for Client {
             .and_then(|text| RecentVideo::from_html(&text))
     }
 
-    /// Get detailed information about a given video
-    async fn get_video(&self, video_seq: u64) -> Result<video::Video> {
+    async fn get_video(&self, video_seq: u64) -> Result<video::VideoState> {
         let video_url = endpoints::video_url(video_seq);
+        let response = self.get(&video_url).send().await?.text().await?;
 
-        let response = self
-            .get(&video_url)
-            .send()
-            .await?
-            .text()
-            .await?;
+        find_video(&response)
+    }
 
-        let video_state = find_video(&response)?;
+    /// Get detailed information about a given video
+    async fn get_video_streams(&self, video_seq: u64) -> Result<video::Video> {
+        let video_url = endpoints::video_url(video_seq);
+        let video_state = self.get_video(video_seq).await?;
 
-        let video_id = video_state.post_detail.post.official_video.vod_id;
+        let video_id = video_state.post_detail.get_detail().official_video.vod_id.as_ref();
+        // let video_id = video_state.post_detail.error.data.official_video.vod_id.as_ref();
 
         let video_key = self
             .get(&endpoints::inkey_url(video_seq))
-            .header(
-                reqwest::header::REFERER,
-                video_url,
-            )
+            .header(reqwest::header::REFERER, video_url)
             // Requires user agent or error 500
-            .header(
-                reqwest::header::USER_AGENT,
-                "vlive-rs",
-            )
+            .header(reqwest::header::USER_AGENT, "vlive-rs")
             .send()
             .await?
             .json::<video::VideoKey>()
@@ -262,7 +257,10 @@ pub fn find_video(s: &str) -> Result<video::VideoState> {
         None => return Err(Error::from("Could not find video JSON state")),
     };
 
-    let state: video::VideoState = serde_json::from_str(json_str)?;
+    // let json_val: serde_json::Value = serde_json::from_str(json_str)?;
+    // let json_str = serde_json::to_string_pretty(&json_val).unwrap();
+    // println!("{}", &json_str);
+    let state: video::VideoState = serde_json::from_str(&json_str)?;
 
     Ok(state)
 }

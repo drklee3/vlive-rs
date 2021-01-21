@@ -1,4 +1,6 @@
 use serde::{Deserialize, Serialize};
+use chrono::naive::serde::ts_milliseconds;
+use chrono::NaiveDateTime;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum VideoType {
@@ -204,7 +206,7 @@ pub struct VideoKey {
 #[serde(rename_all = "camelCase")]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct VideoState {
-    pub post_detail: PostDetail,
+    pub post_detail: Post,
     pub channel: VideoStateChannel,
     pub schedule_detail: Member,
     pub member: Member,
@@ -250,33 +252,82 @@ pub struct Member {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PostDetail {
-    pub post: PostDetailPost,
+pub struct PostSuccess {
+    pub post: PostDetail,
     pub on_loading: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum Post {
+    Success(PostSuccess),
+    Error {
+        error: PostDetailError
+    },
+}
+
+impl Post {
+    pub fn get_detail(&self) -> &PostDetail {
+        match self {
+            Self::Success(d) => &d.post,
+            Self::Error { error, .. } => &error.data,
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PostDetailPost {
-    pub attachments: Attachments,
-    pub url: String,
+pub struct PostDetailErrorWrapper {
+    pub error: PostDetailError,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PostDetailError {
+    pub error_code: String,
+    pub message: String,
+    pub data: PostDetail,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PostDetail {
+    pub post_id: String,
     pub title: String,
-    pub board_id: i64,
+    pub author: Author,
+    pub author_id: Option<String>,
     pub created_at: i64,
-    pub channel_code: String,
+    pub url: String,
+    pub attachments: Option<Attachments>,
     pub available_actions: Vec<String>,
+    pub board_id: Option<i64>,
+    pub channel_code: Option<String>,
+    pub channel: Option<Channel>,
+    pub content_type: Option<String>,
     pub comment_count: i64,
     pub emotion_count: i64,
+    pub is_comment_enabled: Option<bool>,
+    pub is_hidden_from_star: Option<bool>,
+    pub is_viewer_bookmarked: Option<bool>,
+    pub official_video: Box<OfficialVideo>,
+    pub post_version: Option<String>,
+}
+
+/// Post details in a related video
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PartialPostDetail {
     pub post_id: String,
-    pub is_comment_enabled: bool,
-    pub is_hidden_from_star: bool,
-    pub author_id: String,
-    pub post_version: String,
-    pub is_viewer_bookmarked: bool,
-    pub official_video: OfficialVideo,
-    pub content_type: String,
-    pub author: Author,
-    pub channel: PurpleChannel,
+    pub channel: Channel,
+    pub board: BoardInfo,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BoardInfo {
+    pub board_id: i64,
+    pub open_type: String,
+    pub pay_required: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -299,7 +350,7 @@ pub struct Author {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PurpleChannel {
+pub struct Channel {
     pub channel_code: String,
     pub channel_name: String,
 }
@@ -307,37 +358,60 @@ pub struct PurpleChannel {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OfficialVideo {
-    // pub video_seq: i64,
-    // pub official_video_type: String,
-    // pub title: String,
-    // pub multinational_titles: Vec<String>,
-    // pub play_count: i64,
-    // pub like_count: i64,
-    // pub comment_count: i64,
-    // pub thumb: String,
-    // pub expose_status: String,
-    // pub screen_orientation: String,
-    // pub will_start_at: i64,
-    // pub on_air_start_at: i64,
-    // pub will_end_at: i64,
-    // pub created_at: i64,
-    // pub live_thumb_yn: bool,
-    // pub upcoming_yn: bool,
-    // pub product_type: String,
-    // pub pre_ad_yn: bool,
-    // pub post_ad_yn: bool,
-    // pub mobile_da_yn: bool,
-    // pub vr_content_type: String,
-    // pub badges: Vec<String>,
-    // pub light_sticks: Vec<LightStick>,
-    // pub has_moment: bool,
-    // pub recommended_videos: Vec<RecommendedVideo>,
-    pub schema_version: String,
+    pub video_seq: i64,
+    #[serde(rename = "type")]
+    pub kind: String,
+    pub title: String,
+    #[serde(default)]
+    pub multinational_titles: Vec<MultinationalTitle>,
+    pub play_count: i64,
+    pub like_count: i64,
+    pub comment_count: i64,
+    pub thumb: String,
+    pub expose_status: String,
+    pub screen_orientation: Option<String>,
+
+    #[serde(with = "ts_milliseconds")]
+    pub will_start_at: NaiveDateTime,
+
+    #[serde(with = "ts_milliseconds")]
+    pub on_air_start_at: NaiveDateTime,
+
+    #[serde(with = "ts_milliseconds")]
+    pub will_end_at: NaiveDateTime,
+
+    #[serde(with = "ts_milliseconds")]
+    pub created_at: NaiveDateTime,
+    pub live_thumb_yn: bool,
+    pub upcoming_yn: bool,
+    pub product_type: Option<String>,
+    pub pre_ad_yn: bool,
+    pub post_ad_yn: bool,
+
+    #[serde(default)]
+    pub mobile_da_yn: bool,
+    pub vr_content_type: String,
+
+    #[serde(default)]
+    pub badges: Vec<String>,
+
+    #[serde(default)]
+    pub light_sticks: Vec<LightStick>,
+
+    #[serde(default)]
+    pub has_moment: bool,
+
+    // Kinda too annoying since Post is different in recommended videos
+    // #[serde(default)]
+    // pub recommended_videos: Vec<OfficialVideo>,
+
+    pub schema_version: Option<String>,
     pub momentable: bool,
+    pub post: Option<Post>,
     pub vod_id: String,
     pub play_time: i64,
-    pub encoding_status: String,
-    pub vod_secure_status: String,
+    pub encoding_status: Option<String>,
+    pub vod_secure_status: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -354,7 +428,8 @@ pub struct LightStick {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MultinationalTitle {
-    pub multinational_title_type: String,
+    #[serde(rename = "type")]
+    pub kind: String,
     pub seq: i64,
     pub locale: String,
     pub label: String,

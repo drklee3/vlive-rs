@@ -141,6 +141,10 @@ impl RecentVideo {
     pub fn channel_url(&self) -> String {
         format!("https://www.vlive.tv/channel/{}", self.channel_code)
     }
+
+    pub fn video_url(&self) -> String {
+        format!("https://www.vlive.tv/video/{}", self.video_seq)
+    }
 }
 
 pub fn u64_from_str<'de, D>(deserializer: D) -> StdResult<u64, D::Error>
