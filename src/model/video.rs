@@ -1,6 +1,6 @@
-use serde::{Deserialize, Serialize};
 use chrono::naive::serde::ts_milliseconds;
 use chrono::NaiveDateTime;
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum VideoType {
@@ -251,26 +251,17 @@ pub struct Member {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct PostSuccess {
-    pub post: PostDetail,
-    pub on_loading: bool,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Post {
-    Success(PostSuccess),
-    Error {
-        error: PostDetailError
-    },
+    Success { post: PostDetail },
+    Error { error: PostDetailError },
 }
 
 impl Post {
     pub fn get_detail(&self) -> &PostDetail {
         match self {
-            Self::Success(d) => &d.post,
-            Self::Error { error, .. } => &error.data,
+            Self::Success { post } => &post,
+            Self::Error { error } => &error.data,
         }
     }
 }
@@ -360,7 +351,7 @@ pub struct Channel {
 pub struct OfficialVideo {
     pub video_seq: i64,
     #[serde(rename = "type")]
-    pub kind: String,
+    pub kind: VideoType,
     pub title: String,
     #[serde(default)]
     pub multinational_titles: Vec<MultinationalTitle>,
@@ -385,12 +376,7 @@ pub struct OfficialVideo {
     pub live_thumb_yn: bool,
     pub upcoming_yn: bool,
     pub product_type: Option<String>,
-    pub pre_ad_yn: bool,
-    pub post_ad_yn: bool,
-
-    #[serde(default)]
-    pub mobile_da_yn: bool,
-    pub vr_content_type: String,
+    pub vr_content_type: Option<String>,
 
     #[serde(default)]
     pub badges: Vec<String>,
@@ -404,12 +390,13 @@ pub struct OfficialVideo {
     // Kinda too annoying since Post is different in recommended videos
     // #[serde(default)]
     // pub recommended_videos: Vec<OfficialVideo>,
-
     pub schema_version: Option<String>,
     pub momentable: bool,
     pub post: Option<Post>,
-    pub vod_id: String,
-    pub play_time: i64,
+
+    /// VOD ID, None if live video
+    pub vod_id: Option<String>,
+    pub play_time: Option<i64>,
     pub encoding_status: Option<String>,
     pub vod_secure_status: Option<String>,
 }

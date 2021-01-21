@@ -221,7 +221,13 @@ impl VLiveRequester for Client {
         let video_url = endpoints::video_url(video_seq);
         let video_state = self.get_video(video_seq).await?;
 
-        let video_id = video_state.post_detail.get_detail().official_video.vod_id.as_ref();
+        let video_id = video_state
+            .post_detail
+            .get_detail()
+            .official_video
+            .vod_id
+            .as_ref()
+            .ok_or(Error::IsLive)?;
         // let video_id = video_state.post_detail.error.data.official_video.vod_id.as_ref();
 
         let video_key = self

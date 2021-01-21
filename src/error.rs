@@ -13,6 +13,7 @@ pub type Result<T> = StdResult<T, Error>;
 /// errors from various other libraries.
 #[derive(Debug)]
 pub enum Error {
+    IsLive,
     /// A `reqwest` crate error.
     Reqwest(ReqwestError),
     /// A `serde_json` crate error.
@@ -50,6 +51,7 @@ impl<'a> From<&'a str> for Error {
 impl Display for Error {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         match *self {
+            Error::IsLive => write!(f, "Video is live"),
             Error::Reqwest(ref inner) => inner.fmt(f),
             Error::Json(ref inner) => inner.fmt(f),
             Error::Io(ref inner) => inner.fmt(f),

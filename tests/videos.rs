@@ -16,7 +16,10 @@ async fn test_get_video() {
     let video = client.get_video(232024).await.unwrap();
 
     println!("Found video: {:?}", video);
-    assert_eq!(video.post_detail.get_detail().url, "https://www.vlive.tv/post/1-20783092");
+    assert_eq!(
+        video.post_detail.get_detail().url,
+        "https://www.vlive.tv/post/1-20783092"
+    );
 }
 
 #[tokio::test]
@@ -25,7 +28,10 @@ async fn test_get_video_chplus() {
     let video = client.get_video(233176).await.unwrap();
 
     println!("Found video: {:?}", video);
-    assert_eq!(video.post_detail.get_detail().url, "https://www.vlive.tv/post/0-20890974");
+    assert_eq!(
+        video.post_detail.get_detail().url,
+        "https://www.vlive.tv/post/0-20890974"
+    );
 }
 
 #[tokio::test]
