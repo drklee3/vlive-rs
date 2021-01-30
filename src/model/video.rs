@@ -224,24 +224,25 @@ pub struct VideoStateChannel {
 pub struct ChannelChannel {
     pub channel_code: String,
     pub channel_name: String,
+    /// Hex color code prefixed with #
     pub representative_color: String,
+    /// Hex color code prefixed with #
     pub background_color: String,
     pub channel_profile_image: String,
     pub channel_cover_image: String,
     pub channel_description: String,
-    pub prohibited_word_like_list: Vec<Option<serde_json::Value>>,
-    pub prohibited_word_exact_list: Vec<Option<serde_json::Value>>,
-    pub sns_share_img: String,
-    pub qr_code: String,
-    pub open_at: i64,
-    pub show_upcoming: bool,
-    pub use_member_level: bool,
-    pub member_count: i64,
-    pub post_count_of_star: i64,
-    pub video_count_of_star: i64,
-    pub video_play_count_of_star: i64,
-    pub video_like_count_of_star: i64,
-    pub video_comment_count_of_star: i64,
+    // Fields below all Option just in case they're missing
+    pub sns_share_img: Option<String>,
+    pub qr_code: Option<String>,
+    pub open_at: Option<i64>,
+    pub show_upcoming: Option<bool>,
+    pub use_member_level: Option<bool>,
+    pub member_count: Option<i64>,
+    pub post_count_of_star: Option<i64>,
+    pub video_count_of_star: Option<i64>,
+    pub video_play_count_of_star: Option<i64>,
+    pub video_like_count_of_star: Option<i64>,
+    pub video_comment_count_of_star: Option<i64>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
