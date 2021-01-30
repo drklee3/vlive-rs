@@ -89,7 +89,11 @@ impl RecentVideo {
                 .map(|c| c.value())
                 .and_then(|e| e.attr("src"))
             {
-                video_attrs.insert("thumbnail_url", Cow::from(url));
+                // Remove ?type=f228_128_wp param to get full image
+                video_attrs.insert(
+                    "thumbnail_url",
+                    Cow::from(url.trim_end_matches("?type=f228_128_wp")),
+                );
             }
 
             // When posted
