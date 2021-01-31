@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Error","Common error type used throughout the library, to be used as a holder for errors from various other libraries."]],"type":[["Result","Common result type used throughout the library."]]});

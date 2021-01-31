@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Attachments",""],["Author",""],["Board",""],["BoardPosts",""],["Channel",""],["NextParams",""],["Paging",""],["Photo",""],["Post",""],["Thumbnail",""]]});
