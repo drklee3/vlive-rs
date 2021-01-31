@@ -1,0 +1,69 @@
+# Adapted from https://github.com/serenity-rs/serenity/blob/c3c7aee09de43b951626031c8b17e20f2860a655/.github/workflows/docs.yml
+#
+# ISC License (ISC)
+#
+# Copyright (c) 2016, Serenity Contributors
+#
+# Permission to use, copy, modify, and/or distribute this software for any purpose
+# with or without fee is hereby granted, provided that the above copyright notice
+# and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+# REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+# FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+# INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+# OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+# TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+# THIS SOFTWARE.
+
+name: Publish docs
+
+on:
+    push:
+        branches:
+            - current
+
+jobs:
+    docs:
+        name: Publish Documentation
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Select toolchain
+              uses: actions-rs/toolchain@v1
+              with:
+                  toolchain: stable
+                  override: true
+
+            - name: Setup cache
+              uses: actions/cache@v2
+              with:
+                  path: |
+                      ~/.cargo/registry
+                      ~/.cargo/git
+                      target/debug
+                  key: ${{ runner.os }}-gh-pages-${{ hashFiles('**/Cargo.toml') }}
+
+            - name: Build Documentation
+              run: |
+                  cargo doc --no-deps
+
+            - name: Prepare Documentation
+              shell: bash -e -O extglob {0}
+              run: |
+                  DIR=${GITHUB_REF/refs\/+(heads|tags)\//}
+                  mkdir -p ./docs/$DIR
+                  touch ./docs/.nojekyll
+                  echo '<meta http-equiv="refresh" content="0;url=serenity/index.html">' > ./docs/$DIR/index.html
+                  mv ./target/doc/* ./docs/$DIR/
+
+            - name: Deploy Documentation
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_branch: gh-pages
+                  publish_dir: ./docs
+                  allow_empty_commit: false
+                  keep_files: true
