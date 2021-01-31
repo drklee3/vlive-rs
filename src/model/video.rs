@@ -225,13 +225,12 @@ pub struct ChannelChannel {
     pub channel_code: String,
     pub channel_name: String,
     /// Hex color code prefixed with #
-    pub representative_color: String,
+    pub representative_color: Option<String>,
     /// Hex color code prefixed with #
-    pub background_color: String,
-    pub channel_profile_image: String,
-    pub channel_cover_image: String,
-    pub channel_description: String,
-    // Fields below all Option just in case they're missing
+    pub background_color: Option<String>,
+    pub channel_profile_image: Option<String>,
+    pub channel_cover_image: Option<String>,
+    pub channel_description: Option<String>,
     pub sns_share_img: Option<String>,
     pub qr_code: Option<String>,
     pub open_at: Option<i64>,
