@@ -23,6 +23,8 @@ pub struct RecentVideo {
     pub channel_seq: u64,
     pub channel_code: String,
     pub channel_type: ChannelType,
+
+    /// May be None if live
     pub thumbnail_url: Option<String>,
 
     /// None if this is live
@@ -148,6 +150,23 @@ impl RecentVideo {
 
     pub fn video_url(&self) -> String {
         format!("https://www.vlive.tv/video/{}", self.video_seq)
+    }
+
+    /// Returns the static thumbnail if available, otherwise the live thumbnail
+    pub fn thumbnail_url(&self) -> String {
+        self.thumbnail_url
+            .clone()
+            .unwrap_or_else(|| self.live_thumbnail_url())
+    }
+
+    /// Returns a live updating thumbnail for live streams. This also works for
+    /// VODs, which displays a frame near the end of the VOD.
+    pub fn live_thumbnail_url(&self) -> String {
+        // type= parameter has to be any non-null for max size, default is type=f228_128
+        format!(
+            "https://vlive-thumb.pstatic.net/live/{}/thumb?type=f1280_720",
+            self.video_seq
+        )
     }
 }
 
