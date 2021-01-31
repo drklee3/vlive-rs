@@ -11,6 +11,22 @@ async fn test_get_recent_videos() {
 }
 
 #[tokio::test]
+async fn test_get_recent_videos_detail() {
+    let client = Client::new();
+    let videos = client
+        .get_recent_videos(12, 1)
+        .await
+        .expect("Get recent videos");
+
+    println!("Found recent videos: {:#?}", videos);
+    assert!(!videos.is_empty());
+
+    for video in videos {
+        let _data = client.get_video(video.video_seq).await.expect("Get video");
+    }
+}
+
+#[tokio::test]
 async fn test_get_video() {
     let client = Client::new();
     let video = client.get_video(232024).await.unwrap();
