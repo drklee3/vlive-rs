@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["APP_ID",""],["BASE_URL",""]],"enum":[["Error","Common error type used throughout the library, to be used as a holder for errors from various other libraries."]],"mod":[["bridge",""],["model",""]]});
+initSidebarItems({"fn":[["find_video",""]],"mod":[["error",""],["model",""]],"trait":[["VLiveRequester",""]]});
