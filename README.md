@@ -1,4 +1,4 @@
-# VLive-rs
+# vlive-rs
 
 Unofficial Rust wrapper for VLive API.
 
