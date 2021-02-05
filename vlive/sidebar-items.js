@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["find_video",""]],"mod":[["error",""],["model",""]],"trait":[["VLiveRequester",""]]});
+initSidebarItems({"mod":[["error",""],["model",""]],"trait":[["VLiveRequester",""]]});

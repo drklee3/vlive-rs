@@ -47,20 +47,10 @@
 <span id="44">44</span>
 <span id="45">45</span>
 <span id="46">46</span>
-<span id="47">47</span>
-<span id="48">48</span>
-<span id="49">49</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">APP_ID</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;8c6cc7b45d2568fb668be6e05b6e5a3b&quot;</span>;
 
 <span class="comment">// Not optimal way of doing this, but endpoints are weird with parts in middle, not just query params</span>
-
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">channel_info_url</span>(<span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
-    <span class="macro">format</span><span class="macro">!</span>(
-        <span class="string">&quot;https://www.vlive.tv/globalv-web/vam-web/vhs/store/v1.0/channels/{}?appId={}&amp;platformType=PC&quot;</span>,
-        <span class="ident">channel_code</span>, <span class="ident">APP_ID</span>
-    )
-}
 
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">grouped_boards_url</span>(<span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(
@@ -81,6 +71,10 @@
         <span class="string">&quot;https://www.vlive.tv/globalv-web/vam-web/post/v1.0/board-{}/posts?appId={}&amp;fields=attachments,author,availableActions,board%7BboardId,title,boardType,payRequired,includedCountries,excludedCountries%7D,channel%7BchannelName,channelCode%7D,commentCount,contentType,createdAt,emotionCount,excludedCountries,includedCountries,isCommentEnabled,isHiddenFromStar,lastModifierMember,notice,officialVideo,plainBody,postId,postVersion,reservation,starReactions,targetMember,thumbnail,title,url,viewerEmotionId,writtenIn,sharedPosts,originPost&amp;sortType=LATEST&amp;gcc=US&amp;locale=en_US&quot;</span>,
         <span class="ident">board_id</span>, <span class="ident">APP_ID</span>
     )
+}
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">channel_url</span>(<span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;https://www.vlive.tv/channel/{}&quot;</span>, <span class="ident">channel_code</span>)
 }
 
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">video_url</span>(<span class="ident">video_seq</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {

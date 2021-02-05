@@ -218,9 +218,6 @@
 <span id="215">215</span>
 <span id="216">216</span>
 <span id="217">217</span>
-<span id="218">218</span>
-<span id="219">219</span>
-<span id="220">220</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">scraper</span>::{<span class="ident">Html</span>, <span class="ident">Selector</span>};
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de</span>, <span class="ident">Deserialize</span>, <span class="ident">Deserializer</span>};
@@ -322,10 +319,7 @@
                     <span class="ident">Cow</span>::<span class="ident">from</span>(<span class="ident">url</span>)
                 };
 
-                <span class="ident">video_attrs</span>.<span class="ident">insert</span>(
-                    <span class="string">&quot;thumbnail_url&quot;</span>,
-                    <span class="ident">cleaned_url</span>,
-                );
+                <span class="ident">video_attrs</span>.<span class="ident">insert</span>(<span class="string">&quot;thumbnail_url&quot;</span>, <span class="ident">cleaned_url</span>);
             }
 
             <span class="comment">// When posted</span>
