@@ -1,6 +1,7 @@
 use chrono::naive::serde::ts_milliseconds;
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
+use super::channel;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum VideoType {
@@ -207,61 +208,27 @@ pub struct VideoKey {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct VideoState {
     pub post_detail: Post,
-    pub channel: VideoStateChannel,
-    pub schedule_detail: Member,
-    pub member: Member,
+    pub channel: channel::ChannelWrapper,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct VideoStateChannel {
-    pub channel: ChannelChannel,
-    pub on_loading: bool,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct ChannelChannel {
-    pub channel_code: String,
-    pub channel_name: String,
-    /// Hex color code prefixed with #
-    pub representative_color: Option<String>,
-    /// Hex color code prefixed with #
-    pub background_color: Option<String>,
-    pub channel_profile_image: Option<String>,
-    pub channel_cover_image: Option<String>,
-    pub channel_description: Option<String>,
-    pub sns_share_img: Option<String>,
-    pub qr_code: Option<String>,
-    pub open_at: Option<i64>,
-    pub show_upcoming: Option<bool>,
-    pub use_member_level: Option<bool>,
-    pub member_count: Option<i64>,
-    pub post_count_of_star: Option<i64>,
-    pub video_count_of_star: Option<i64>,
-    pub video_play_count_of_star: Option<i64>,
-    pub video_like_count_of_star: Option<i64>,
-    pub video_comment_count_of_star: Option<i64>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Member {
-    pub on_loading: bool,
+impl VideoState {
+    pub fn channel(&self) -> &channel::Channel {
+        &self.channel.channel
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Post {
-    Success { post: PostDetail },
-    Error { error: PostDetailError },
+    Success { post: Option<PostDetail> },
+    Error { error: Option<PostDetailError> },
 }
 
 impl Post {
-    pub fn get_detail(&self) -> &PostDetail {
+    pub fn get_detail(&self) -> Option<&PostDetail> {
         match self {
-            Self::Success { post } => &post,
-            Self::Error { error } => &error.data,
+            Self::Success { post } => post.as_ref(),
+            Self::Error { error } => error.as_ref().map(|d| &d.data),
         }
     }
 }
@@ -293,10 +260,10 @@ pub struct PostDetail {
     pub available_actions: Vec<String>,
     pub board_id: Option<i64>,
     pub channel_code: Option<String>,
-    pub channel: Option<Channel>,
+    pub channel: Option<channel::PartialChannel>,
     pub content_type: Option<String>,
-    pub comment_count: i64,
-    pub emotion_count: i64,
+    pub comment_count: Option<i64>,
+    pub emotion_count: Option<i64>,
     pub is_comment_enabled: Option<bool>,
     pub is_hidden_from_star: Option<bool>,
     pub is_viewer_bookmarked: Option<bool>,
@@ -309,7 +276,7 @@ pub struct PostDetail {
 #[serde(rename_all = "camelCase")]
 pub struct PartialPostDetail {
     pub post_id: String,
-    pub channel: Channel,
+    pub channel: channel::PartialChannel,
     pub board: BoardInfo,
 }
 
@@ -341,13 +308,6 @@ pub struct Author {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Channel {
-    pub channel_code: String,
-    pub channel_name: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct OfficialVideo {
     pub video_seq: i64,
     #[serde(rename = "type")]
@@ -373,8 +333,8 @@ pub struct OfficialVideo {
 
     #[serde(with = "ts_milliseconds")]
     pub created_at: NaiveDateTime,
-    pub live_thumb_yn: bool,
-    pub upcoming_yn: bool,
+    pub live_thumb_yn: Option<bool>,
+    pub upcoming_yn: Option<bool>,
     pub product_type: Option<String>,
     pub vr_content_type: Option<String>,
 
@@ -383,15 +343,12 @@ pub struct OfficialVideo {
 
     #[serde(default)]
     pub light_sticks: Vec<LightStick>,
-
-    #[serde(default)]
-    pub has_moment: bool,
-
+    pub has_moment: Option<bool>,
     // Kinda too annoying since Post is different in recommended videos
     // #[serde(default)]
     // pub recommended_videos: Vec<OfficialVideo>,
     pub schema_version: Option<String>,
-    pub momentable: bool,
+    pub momentable: Option<bool>,
     pub post: Option<Post>,
 
     /// VOD ID, None if live video

@@ -1,6 +1,50 @@
 use crate::model::helpers::*;
 use chrono::{offset::FixedOffset, DateTime};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ChannelWrapper {
+    pub channel: Channel,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Channel {
+    pub channel_code: String,
+    pub channel_name: String,
+    /// Hex color code prefixed with #
+    pub representative_color: Option<String>,
+    /// Hex color code prefixed with #
+    pub background_color: Option<String>,
+    pub channel_profile_image: Option<String>,
+    pub channel_cover_image: Option<String>,
+    pub channel_description: Option<String>,
+    pub sns_share_img: Option<String>,
+    pub qr_code: Option<String>,
+    pub open_at: Option<i64>,
+    pub show_upcoming: Option<bool>,
+    pub use_member_level: Option<bool>,
+    pub member_count: Option<i64>,
+    pub post_count_of_star: Option<i64>,
+    pub video_count_of_star: Option<i64>,
+    pub video_play_count_of_star: Option<i64>,
+    pub video_like_count_of_star: Option<i64>,
+    pub video_comment_count_of_star: Option<i64>,
+}
+
+impl Channel {
+    pub fn url(&self) -> String {
+        format!("https://www.vlive.tv/channel/{}", self.channel_code)
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PartialChannel {
+    pub channel_code: String,
+    pub channel_name: String,
+}
 
 /// Type of channel, basic or CHANNEL+
 #[derive(Deserialize, Clone, Debug)]

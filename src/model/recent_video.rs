@@ -98,10 +98,7 @@ impl RecentVideo {
                     Cow::from(url)
                 };
 
-                video_attrs.insert(
-                    "thumbnail_url",
-                    cleaned_url,
-                );
+                video_attrs.insert("thumbnail_url", cleaned_url);
             }
 
             // When posted

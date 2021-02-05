@@ -30,6 +30,10 @@ pub fn board_posts_url(board_id: u64) -> String {
     )
 }
 
+pub fn channel_url(channel_code: &str) -> String {
+    format!("https://www.vlive.tv/channel/{}", channel_code)
+}
+
 pub fn video_url(video_seq: u64) -> String {
     format!("https://www.vlive.tv/video/{}", video_seq)
 }

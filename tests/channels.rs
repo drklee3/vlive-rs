@@ -18,12 +18,20 @@ async fn test_search_channel() {
 
 #[tokio::test]
 async fn test_get_channel_info() {
+    let channels = vec![
+        "FDE29", "FE619", "F001E5", "F94BD", "ECDF", "EDBF", "F13F", "FD53B", "F99B3", "F3C16D",
+        "FA895", "F021E1", "D5E529",
+    ];
     let client = Client::new();
 
-    let channel = client.get_channel_info("FE619".into()).await.unwrap();
+    for channel_code in channels {
+        let channel = client
+            .get_channel_info(channel_code.into())
+            .await
+            .expect(&format!("get_channel_info {}", channel_code));
 
-    assert!(channel.channel_code == "FE619");
-    assert!(channel.name == "BTS");
+        assert_eq!(channel.channel_code, channel_code);
+    }
 }
 
 #[tokio::test]

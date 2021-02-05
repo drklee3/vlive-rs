@@ -10,6 +10,7 @@ use async_trait::async_trait;
 use lazy_static::lazy_static;
 use regex::Regex;
 use reqwest::Client;
+use serde::Deserialize;
 
 mod endpoints;
 pub mod error;
@@ -39,7 +40,7 @@ macro_rules! api {
 #[async_trait]
 pub trait VLiveRequester {
     async fn search_channel(&self, query: &str, num_rows: u64) -> Result<channel::ChannelList>;
-    async fn get_channel_info(&self, channel_code: &str) -> Result<channel::ChannelBasicInfo>;
+    async fn get_channel_info(&self, channel_code: &str) -> Result<channel::Channel>;
 
     async fn decode_channel_code(&self, channel_code: &str) -> Result<u64>;
     async fn get_channel_grouped_boards(&self, channel_code: &str) -> Result<GroupedBoards>;
@@ -79,17 +80,13 @@ impl VLiveRequester for Client {
     }
 
     /// Get basic information about a channel
-    async fn get_channel_info(&self, channel_code: &str) -> Result<channel::ChannelBasicInfo> {
-        self.get(&endpoints::channel_info_url(&channel_code))
-            .header(
-                reqwest::header::REFERER,
-                (format!("https://www.vlive.tv/channel/{}", channel_code)),
-            )
-            .send()
-            .await?
-            .json::<channel::ChannelBasicInfo>()
-            .await
-            .map_err(From::from)
+    async fn get_channel_info(&self, channel_code: &str) -> Result<channel::Channel> {
+        let channel_url = endpoints::channel_url(channel_code);
+        let response = self.get(&channel_url).send().await?.text().await?;
+
+        let s = find_inline_state::<video::VideoState>(&response)?;
+
+        Ok(s.channel.channel)
     }
 
     async fn decode_channel_code(&self, channel_code: &str) -> Result<u64> {
@@ -213,7 +210,7 @@ impl VLiveRequester for Client {
         let video_url = endpoints::video_url(video_seq);
         let response = self.get(&video_url).send().await?.text().await?;
 
-        find_video(&response)
+        find_inline_state::<video::VideoState>(&response)
     }
 
     /// Get detailed information about a given video
@@ -224,6 +221,7 @@ impl VLiveRequester for Client {
         let video_id = video_state
             .post_detail
             .get_detail()
+            .ok_or(Error::MissingDetails)?
             .official_video
             .vod_id
             .as_ref()
@@ -249,7 +247,7 @@ impl VLiveRequester for Client {
     }
 }
 
-pub fn find_video(s: &str) -> Result<video::VideoState> {
+fn find_inline_state<'a, T: Deserialize<'a>>(s: &'a str) -> Result<T> {
     // basically just scrape the page for video id and key since there's no api endpoint to get this
     // Yes I know regex shouldn't be used for html parsing, but it's kind of just in a JS script in html weird
     lazy_static! {
@@ -266,7 +264,7 @@ pub fn find_video(s: &str) -> Result<video::VideoState> {
     // let json_val: serde_json::Value = serde_json::from_str(json_str)?;
     // let json_str = serde_json::to_string_pretty(&json_val).unwrap();
     // println!("{}", &json_str);
-    let state: video::VideoState = serde_json::from_str(&json_str)?;
+    let state: T = serde_json::from_str(&json_str)?;
 
     Ok(state)
 }
