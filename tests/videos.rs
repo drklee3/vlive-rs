@@ -48,6 +48,10 @@ async fn test_get_video_chplus() {
     let video = client.get_video(233176).await.unwrap();
 
     println!("Found video: {:?}", video);
+    assert_eq!(
+        video.post_detail.get_detail().expect("Has detail").url,
+        "https://www.vlive.tv/post/0-20890974"
+    );
 }
 
 #[tokio::test]

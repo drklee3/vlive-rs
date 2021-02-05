@@ -220,15 +220,18 @@ impl VideoState {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Post {
+    /// Error if this is a paid video. This still contains video information.
+    // Above Success since untagged will try deserializing top to bottom and
+    // None will be a match for Success even if it is an Error type
+    Error { error: PostDetailError },
     Success { post: Option<PostDetail> },
-    Error { error: Option<PostDetailError> },
 }
 
 impl Post {
     pub fn get_detail(&self) -> Option<&PostDetail> {
         match self {
             Self::Success { post } => post.as_ref(),
-            Self::Error { error } => error.as_ref().map(|d| &d.data),
+            Self::Error { error } => error.data.as_ref(),
         }
     }
 }
@@ -244,7 +247,7 @@ pub struct PostDetailErrorWrapper {
 pub struct PostDetailError {
     pub error_code: String,
     pub message: String,
-    pub data: PostDetail,
+    pub data: Option<PostDetail>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

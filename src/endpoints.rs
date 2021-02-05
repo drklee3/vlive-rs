@@ -2,13 +2,6 @@ pub const APP_ID: &str = "8c6cc7b45d2568fb668be6e05b6e5a3b";
 
 // Not optimal way of doing this, but endpoints are weird with parts in middle, not just query params
 
-pub fn channel_info_url(channel_code: &str) -> String {
-    format!(
-        "https://www.vlive.tv/globalv-web/vam-web/vhs/store/v1.0/channels/{}?appId={}&platformType=PC",
-        channel_code, APP_ID
-    )
-}
-
 pub fn grouped_boards_url(channel_code: &str) -> String {
     format!(
         "https://www.vlive.tv/globalv-web/vam-web/board/v1.0/channel-{}/groupedBoards?appId={}&fields=boardId,title,boardType,openType,allowedViewers,includedCountries,excludedCountries,useStarFilter,payRequired,expose,channelCode,lastUpdatedAt",

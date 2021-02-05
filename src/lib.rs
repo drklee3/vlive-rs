@@ -10,7 +10,6 @@ use async_trait::async_trait;
 use lazy_static::lazy_static;
 use regex::Regex;
 use reqwest::Client;
-use serde::Deserialize;
 
 mod endpoints;
 pub mod error;
@@ -84,7 +83,7 @@ impl VLiveRequester for Client {
         let channel_url = endpoints::channel_url(channel_code);
         let response = self.get(&channel_url).send().await?.text().await?;
 
-        let s = find_inline_state::<video::VideoState>(&response)?;
+        let s = find_inline_state(&response)?;
 
         Ok(s.channel.channel)
     }
@@ -210,7 +209,7 @@ impl VLiveRequester for Client {
         let video_url = endpoints::video_url(video_seq);
         let response = self.get(&video_url).send().await?.text().await?;
 
-        find_inline_state::<video::VideoState>(&response)
+        find_inline_state(&response)
     }
 
     /// Get detailed information about a given video
@@ -247,7 +246,7 @@ impl VLiveRequester for Client {
     }
 }
 
-fn find_inline_state<'a, T: Deserialize<'a>>(s: &'a str) -> Result<T> {
+fn find_inline_state(s: &str) -> Result<video::VideoState> {
     // basically just scrape the page for video id and key since there's no api endpoint to get this
     // Yes I know regex shouldn't be used for html parsing, but it's kind of just in a JS script in html weird
     lazy_static! {
@@ -264,7 +263,7 @@ fn find_inline_state<'a, T: Deserialize<'a>>(s: &'a str) -> Result<T> {
     // let json_val: serde_json::Value = serde_json::from_str(json_str)?;
     // let json_str = serde_json::to_string_pretty(&json_val).unwrap();
     // println!("{}", &json_str);
-    let state: T = serde_json::from_str(&json_str)?;
+    let state: video::VideoState = serde_json::from_str(&json_str)?;
 
     Ok(state)
 }
