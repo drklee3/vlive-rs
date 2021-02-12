@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../vlive/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../vlive/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
                 <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -311,84 +311,84 @@
 
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">VLiveRequester</span> {
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">search_channel</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">query</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">num_rows</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">ChannelList</span><span class="op">&gt;</span>;
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_channel_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">Channel</span><span class="op">&gt;</span>;
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">search_channel</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">query</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">num_rows</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">ChannelList</span><span class="op">&gt;</span>;
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_channel_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">Channel</span><span class="op">&gt;</span>;
 
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">decode_channel_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>;
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_channel_grouped_boards</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">GroupedBoards</span><span class="op">&gt;</span>;
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_channel_board</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">board_id</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Board</span><span class="op">&gt;</span>;
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_board_posts</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">board_id</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BoardPosts</span><span class="op">&gt;</span>;
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">decode_channel_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>;
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_channel_grouped_boards</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">GroupedBoards</span><span class="op">&gt;</span>;
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_channel_board</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">board_id</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Board</span><span class="op">&gt;</span>;
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_board_posts</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">board_id</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BoardPosts</span><span class="op">&gt;</span>;
 
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_channel_video_list</span>(
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_channel_video_list</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">channel_seq</span>: <span class="ident">u32</span>,
         <span class="ident">max_rows</span>: <span class="ident">u32</span>,
         <span class="ident">page_no</span>: <span class="ident">u32</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">ChannelVideoList</span><span class="op">&gt;</span>;
 
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_upcoming_video_list</span>(
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_upcoming_video_list</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">channel_seq</span>: <span class="ident">u32</span>,
         <span class="ident">max_rows</span>: <span class="ident">u32</span>,
         <span class="ident">page_no</span>: <span class="ident">u32</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">ChannelUpcomingVideoList</span><span class="op">&gt;</span>;
 
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_recent_videos</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">page_size</span>: <span class="ident">u64</span>, <span class="ident">page_no</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">RecentVideo</span><span class="op">&gt;</span><span class="op">&gt;</span>;
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_video</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">video_seq</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">video</span>::<span class="ident">VideoState</span><span class="op">&gt;</span>;
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_video_streams</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">video_seq</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">video</span>::<span class="ident">Video</span><span class="op">&gt;</span>;
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_recent_videos</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">page_size</span>: <span class="ident">u64</span>, <span class="ident">page_no</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">RecentVideo</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_video</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">video_seq</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">video</span>::<span class="ident">VideoState</span><span class="op">&gt;</span>;
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_video_streams</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">video_seq</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">video</span>::<span class="ident">Video</span><span class="op">&gt;</span>;
 }
 
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
 <span class="kw">impl</span> <span class="ident">VLiveRequester</span> <span class="kw">for</span> <span class="ident">Client</span> {
     <span class="doccomment">/// Search for a channel by name</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">search_channel</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">query</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">num_rows</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">ChannelList</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">search_channel</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">query</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">num_rows</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">ChannelList</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">get</span>(<span class="string">&quot;http://www.vlive.tv/search/auto/channels&quot;</span>)
             .<span class="ident">query</span>(<span class="kw-2">&amp;</span>[(<span class="string">&quot;query&quot;</span>, <span class="ident">query</span>), (<span class="string">&quot;maxNumOfRows&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">num_rows</span>.<span class="ident">to_string</span>())])
             .<span class="ident">send</span>()
-            .<span class="ident">await</span><span class="question-mark">?</span>
+            .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">json</span>::<span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">ChannelList</span><span class="op">&gt;</span>()
-            .<span class="ident">await</span>
+            .<span class="kw">await</span>
             .<span class="ident">map_err</span>(<span class="ident">From</span>::<span class="ident">from</span>)
     }
 
     <span class="doccomment">/// Get basic information about a channel</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_channel_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">Channel</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_channel_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">Channel</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">channel_url</span> <span class="op">=</span> <span class="ident">endpoints</span>::<span class="ident">channel_url</span>(<span class="ident">channel_code</span>);
-        <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">channel_url</span>).<span class="ident">send</span>().<span class="ident">await</span><span class="question-mark">?</span>.<span class="ident">text</span>().<span class="ident">await</span><span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">channel_url</span>).<span class="ident">send</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">text</span>().<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">find_inline_state</span>(<span class="kw-2">&amp;</span><span class="ident">response</span>)<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(<span class="ident">s</span>.<span class="ident">channel</span>.<span class="ident">channel</span>)
     }
 
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">decode_channel_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">decode_channel_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">get</span>(<span class="macro">api</span><span class="macro">!</span>(<span class="string">&quot;decodeChannelCode&quot;</span>))
             .<span class="ident">query</span>(<span class="kw-2">&amp;</span>[(<span class="string">&quot;app_id&quot;</span>, <span class="ident">APP_ID</span>), (<span class="string">&quot;channelCode&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">channel_code</span>)])
             .<span class="ident">send</span>()
-            .<span class="ident">await</span><span class="question-mark">?</span>
+            .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">json</span>::<span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">DecodeChannelCodeResult</span><span class="op">&gt;</span>()
-            .<span class="ident">await</span>
+            .<span class="kw">await</span>
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">result</span>.<span class="ident">channel_seq</span>)
             .<span class="ident">map_err</span>(<span class="ident">From</span>::<span class="ident">from</span>)
     }
 
     <span class="doccomment">/// Get a channel&#39;s boards, grouped into different categories</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_channel_grouped_boards</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">GroupedBoards</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_channel_grouped_boards</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">GroupedBoards</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">endpoints</span>::<span class="ident">grouped_boards_url</span>(<span class="kw-2">&amp;</span><span class="ident">channel_code</span>))
             .<span class="ident">header</span>(
                 <span class="ident">reqwest</span>::<span class="ident">header</span>::<span class="ident">REFERER</span>,
                 (<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;https://www.vlive.tv/channel/{}&quot;</span>, <span class="ident">channel_code</span>)),
             )
             .<span class="ident">send</span>()
-            .<span class="ident">await</span><span class="question-mark">?</span>
+            .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">json</span>::<span class="op">&lt;</span><span class="ident">GroupedBoards</span><span class="op">&gt;</span>()
-            .<span class="ident">await</span>
+            .<span class="kw">await</span>
             .<span class="ident">map_err</span>(<span class="ident">From</span>::<span class="ident">from</span>)
     }
 
     <span class="doccomment">/// Gets a channel&#39;s board info. Note that this doesn&#39;t include the actual board posts</span>
     <span class="doccomment">/// Channel code is required since the referer requires the channel board URL</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_channel_board</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">board_id</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Board</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_channel_board</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">board_id</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Board</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">endpoints</span>::<span class="ident">board_url</span>(<span class="ident">board_id</span>))
             .<span class="ident">header</span>(
                 <span class="ident">reqwest</span>::<span class="ident">header</span>::<span class="ident">REFERER</span>,
@@ -398,14 +398,14 @@
                 )),
             )
             .<span class="ident">send</span>()
-            .<span class="ident">await</span><span class="question-mark">?</span>
+            .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">json</span>::<span class="op">&lt;</span><span class="ident">Board</span><span class="op">&gt;</span>()
-            .<span class="ident">await</span>
+            .<span class="kw">await</span>
             .<span class="ident">map_err</span>(<span class="ident">From</span>::<span class="ident">from</span>)
     }
 
     <span class="doccomment">/// Get the posts in a given board</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_board_posts</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">board_id</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BoardPosts</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_board_posts</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">board_id</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BoardPosts</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">endpoints</span>::<span class="ident">board_posts_url</span>(<span class="ident">board_id</span>))
             .<span class="ident">header</span>(
                 <span class="ident">reqwest</span>::<span class="ident">header</span>::<span class="ident">REFERER</span>,
@@ -415,13 +415,13 @@
                 )),
             )
             .<span class="ident">send</span>()
-            .<span class="ident">await</span><span class="question-mark">?</span>
+            .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">json</span>::<span class="op">&lt;</span><span class="ident">BoardPosts</span><span class="op">&gt;</span>()
-            .<span class="ident">await</span>
+            .<span class="kw">await</span>
             .<span class="ident">map_err</span>(<span class="ident">From</span>::<span class="ident">from</span>)
     }
 
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_channel_video_list</span>(
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_channel_video_list</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">channel_seq</span>: <span class="ident">u32</span>,
         <span class="ident">max_rows</span>: <span class="ident">u32</span>,
@@ -435,14 +435,14 @@
                 (<span class="string">&quot;pageNo&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">page_no</span>.<span class="ident">to_string</span>()),
             ])
             .<span class="ident">send</span>()
-            .<span class="ident">await</span><span class="question-mark">?</span>
+            .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">json</span>::<span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">ChannelVideoListResult</span><span class="op">&gt;</span>()
-            .<span class="ident">await</span>
+            .<span class="kw">await</span>
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">r</span><span class="op">|</span> <span class="ident">r</span>.<span class="ident">result</span>)
             .<span class="ident">map_err</span>(<span class="ident">From</span>::<span class="ident">from</span>)
     }
 
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_upcoming_video_list</span>(
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_upcoming_video_list</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">channel_seq</span>: <span class="ident">u32</span>,
         <span class="ident">max_rows</span>: <span class="ident">u32</span>,
@@ -456,39 +456,39 @@
                 (<span class="string">&quot;pageNo&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">page_no</span>.<span class="ident">to_string</span>()),
             ])
             .<span class="ident">send</span>()
-            .<span class="ident">await</span><span class="question-mark">?</span>
+            .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">json</span>::<span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">ChannelUpcomingVideoListResult</span><span class="op">&gt;</span>()
-            .<span class="ident">await</span>
+            .<span class="kw">await</span>
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">r</span><span class="op">|</span> <span class="ident">r</span>.<span class="ident">result</span>)
             .<span class="ident">map_err</span>(<span class="ident">From</span>::<span class="ident">from</span>)
     }
 
     <span class="doccomment">/// Fetches new videos from any channel (equivalent to the new section on the homepage)</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_recent_videos</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">page_size</span>: <span class="ident">u64</span>, <span class="ident">page_no</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">RecentVideo</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_recent_videos</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">page_size</span>: <span class="ident">u64</span>, <span class="ident">page_no</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">RecentVideo</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">get</span>(<span class="string">&quot;https://www.vlive.tv/home/video/more&quot;</span>)
             .<span class="ident">query</span>(<span class="kw-2">&amp;</span>[
                 (<span class="string">&quot;pageNo&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">page_no</span>.<span class="ident">to_string</span>()),
                 (<span class="string">&quot;pageSize&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">page_size</span>.<span class="ident">to_string</span>()),
             ])
             .<span class="ident">send</span>()
-            .<span class="ident">await</span><span class="question-mark">?</span>
+            .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">text</span>()
-            .<span class="ident">await</span>
+            .<span class="kw">await</span>
             .<span class="ident">map_err</span>(<span class="ident">From</span>::<span class="ident">from</span>)
             .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">text</span><span class="op">|</span> <span class="ident">RecentVideo</span>::<span class="ident">from_html</span>(<span class="kw-2">&amp;</span><span class="ident">text</span>))
     }
 
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_video</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">video_seq</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">video</span>::<span class="ident">VideoState</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_video</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">video_seq</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">video</span>::<span class="ident">VideoState</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">video_url</span> <span class="op">=</span> <span class="ident">endpoints</span>::<span class="ident">video_url</span>(<span class="ident">video_seq</span>);
-        <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">video_url</span>).<span class="ident">send</span>().<span class="ident">await</span><span class="question-mark">?</span>.<span class="ident">text</span>().<span class="ident">await</span><span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">video_url</span>).<span class="ident">send</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">text</span>().<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="ident">find_inline_state</span>(<span class="kw-2">&amp;</span><span class="ident">response</span>)
     }
 
     <span class="doccomment">/// Get detailed information about a given video</span>
-    <span class="ident">async</span> <span class="kw">fn</span> <span class="ident">get_video_streams</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">video_seq</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">video</span>::<span class="ident">Video</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_video_streams</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">video_seq</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">video</span>::<span class="ident">Video</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">video_url</span> <span class="op">=</span> <span class="ident">endpoints</span>::<span class="ident">video_url</span>(<span class="ident">video_seq</span>);
-        <span class="kw">let</span> <span class="ident">video_state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_video</span>(<span class="ident">video_seq</span>).<span class="ident">await</span><span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">video_state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_video</span>(<span class="ident">video_seq</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">video_id</span> <span class="op">=</span> <span class="ident">video_state</span>
             .<span class="ident">post_detail</span>
@@ -506,15 +506,15 @@
             <span class="comment">// Requires user agent or error 500</span>
             .<span class="ident">header</span>(<span class="ident">reqwest</span>::<span class="ident">header</span>::<span class="ident">USER_AGENT</span>, <span class="string">&quot;vlive-rs&quot;</span>)
             .<span class="ident">send</span>()
-            .<span class="ident">await</span><span class="question-mark">?</span>
+            .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">json</span>::<span class="op">&lt;</span><span class="ident">video</span>::<span class="ident">VideoKey</span><span class="op">&gt;</span>()
-            .<span class="ident">await</span><span class="question-mark">?</span>;
+            .<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="self">self</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">endpoints</span>::<span class="ident">vod_url</span>(<span class="kw-2">&amp;</span><span class="ident">video_id</span>, <span class="kw-2">&amp;</span><span class="ident">video_key</span>.<span class="ident">inkey</span>))
             .<span class="ident">send</span>()
-            .<span class="ident">await</span><span class="question-mark">?</span>
+            .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">json</span>::<span class="op">&lt;</span><span class="ident">video</span>::<span class="ident">Video</span><span class="op">&gt;</span>()
-            .<span class="ident">await</span>
+            .<span class="kw">await</span>
             .<span class="ident">map_err</span>(<span class="ident">From</span>::<span class="ident">from</span>)
     }
 }
