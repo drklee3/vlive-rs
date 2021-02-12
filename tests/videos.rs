@@ -25,7 +25,7 @@ async fn test_get_recent_videos_detail() {
         let _data = client.get_video(video.video_seq).await.expect("Get video");
 
         if let Some(url) = video.thumbnail_url {
-            assert!(url.ends_with(".png") || url.ends_with(".jpg"));
+            assert!(url.ends_with(".png") || url.ends_with(".jpg") || url.ends_with(".jpeg"));
         }
     }
 }
