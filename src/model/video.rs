@@ -1,7 +1,7 @@
+use super::channel;
 use chrono::naive::serde::ts_milliseconds;
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
-use super::channel;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum VideoType {
@@ -223,8 +223,12 @@ pub enum Post {
     /// Error if this is a paid video. This still contains video information.
     // Above Success since untagged will try deserializing top to bottom and
     // None will be a match for Success even if it is an Error type
-    Error { error: PostDetailError },
-    Success { post: Option<PostDetail> },
+    Error {
+        error: PostDetailError,
+    },
+    Success {
+        post: Option<PostDetail>,
+    },
 }
 
 impl Post {
@@ -236,6 +240,7 @@ impl Post {
     }
 }
 
+// These wrappers are just for debugging since using an untagged enum hides useful error messages
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PostDetailErrorWrapper {
@@ -248,6 +253,17 @@ pub struct PostDetailError {
     pub error_code: String,
     pub message: String,
     pub data: Option<PostDetail>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PostWrapper {
+    pub post: Option<PostDetail>,
+}
+
+impl PostWrapper {
+    pub fn get_detail(&self) -> Option<&PostDetail> {
+        self.post.as_ref()
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]

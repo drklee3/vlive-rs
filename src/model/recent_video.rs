@@ -139,9 +139,20 @@ impl RecentVideo {
             }
 
             let val = serde_json::to_value(&video_attrs)?;
-            let video: RecentVideo = serde_json::from_value(val)?;
+            let video = serde_json::from_value::<RecentVideo>(val);
 
-            videos.push(video);
+            match video {
+                Ok(v) => videos.push(v),
+                Err(e) => {
+                    tracing::error!(
+                        ?video_attrs,
+                        "Failed to deserialize recent video, skipping: {}\n\
+                        html: {}",
+                        e,
+                        video_element.html(),
+                    );
+                }
+            }
         }
 
         Ok(videos)
