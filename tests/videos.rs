@@ -18,13 +18,14 @@ async fn test_get_recent_videos_detail() {
         .await
         .expect("Get recent videos");
 
-    println!("Found recent videos: {:#?}", videos);
+    // println!("Found recent videos: {:#?}", videos);
     assert!(!videos.is_empty());
 
     for video in videos {
         let _data = client.get_video(video.video_seq).await.expect("Get video");
 
         if let Some(url) = video.thumbnail_url {
+            let url = url.to_lowercase();
             assert!(url.ends_with(".png") || url.ends_with(".jpg") || url.ends_with(".jpeg"));
         }
     }
