@@ -64,6 +64,11 @@ impl Display for Error {
 
 impl StdError for Error {
     fn source(&self) -> Option<&(dyn StdError + 'static)> {
-        Some(self)
+        match *self {
+            Error::Reqwest(ref inner) => Some(inner),
+            Error::Json(ref inner) => Some(inner),
+            Error::Io(ref inner) => Some(inner),
+            Error::IsLive | Error::MissingDetails | Error::Vlive(_) => None,
+        }
     }
 }
