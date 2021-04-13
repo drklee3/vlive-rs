@@ -7,7 +7,7 @@ async fn test_get_recent_videos() {
     let videos = client.get_recent_videos(12, 1).await.unwrap();
 
     println!("Found recent videos: {:#?}", videos);
-    assert!(!videos.is_empty());
+    assert_eq!(videos.len(), 12);
 }
 
 #[tokio::test]
@@ -18,8 +18,8 @@ async fn test_get_recent_videos_detail() {
         .await
         .expect("Get recent videos");
 
-    // println!("Found recent videos: {:#?}", videos);
-    assert!(!videos.is_empty());
+    println!("Found recent videos: {:#?}", videos);
+    assert_eq!(videos.len(), 12);
 
     for video in videos {
         let _data = client.get_video(video.video_seq).await.expect("Get video");
