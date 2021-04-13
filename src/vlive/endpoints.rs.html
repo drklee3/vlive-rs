@@ -83,7 +83,7 @@
 
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">inkey_url</span>(<span class="ident">video_seq</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(
-        <span class="string">&quot;https://www.vlive.tv/globalv-web/vam-web/video/v1.0/vod/{}/inkey?appId={}&quot;</span>,
+        <span class="string">&quot;https://www.vlive.tv/globalv-web/vam-web/video/v1.0/vod/{}/inkey?appId={}&amp;platformType=PC&amp;gcc=US&amp;locale=en_US&quot;</span>,
         <span class="ident">video_seq</span>, <span class="ident">APP_ID</span>
     )
 }
@@ -95,4 +95,5 @@
     )
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "vlive";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="vlive"></div>
+    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

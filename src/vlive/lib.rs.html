@@ -270,6 +270,23 @@
 <span id="267">267</span>
 <span id="268">268</span>
 <span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">/// # vlive-rs</span>
 <span class="doccomment">///</span>
@@ -341,6 +358,7 @@
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
 <span class="kw">impl</span> <span class="ident">VLiveRequester</span> <span class="kw">for</span> <span class="ident">Client</span> {
     <span class="doccomment">/// Search for a channel by name</span>
+    <span class="attribute">#[<span class="ident">tracing</span>::<span class="ident">instrument</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">search_channel</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">query</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">num_rows</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">ChannelList</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">get</span>(<span class="string">&quot;http://www.vlive.tv/search/auto/channels&quot;</span>)
             .<span class="ident">query</span>(<span class="kw-2">&amp;</span>[(<span class="string">&quot;query&quot;</span>, <span class="ident">query</span>), (<span class="string">&quot;maxNumOfRows&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">num_rows</span>.<span class="ident">to_string</span>())])
@@ -352,6 +370,7 @@
     }
 
     <span class="doccomment">/// Get basic information about a channel</span>
+    <span class="attribute">#[<span class="ident">tracing</span>::<span class="ident">instrument</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_channel_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">channel</span>::<span class="ident">Channel</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">channel_url</span> <span class="op">=</span> <span class="ident">endpoints</span>::<span class="ident">channel_url</span>(<span class="ident">channel_code</span>);
         <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">channel_url</span>).<span class="ident">send</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">text</span>().<span class="kw">await</span><span class="question-mark">?</span>;
@@ -361,6 +380,7 @@
         <span class="prelude-val">Ok</span>(<span class="ident">s</span>.<span class="ident">channel</span>.<span class="ident">channel</span>)
     }
 
+    <span class="attribute">#[<span class="ident">tracing</span>::<span class="ident">instrument</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">decode_channel_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">get</span>(<span class="macro">api</span><span class="macro">!</span>(<span class="string">&quot;decodeChannelCode&quot;</span>))
             .<span class="ident">query</span>(<span class="kw-2">&amp;</span>[(<span class="string">&quot;app_id&quot;</span>, <span class="ident">APP_ID</span>), (<span class="string">&quot;channelCode&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">channel_code</span>)])
@@ -373,6 +393,7 @@
     }
 
     <span class="doccomment">/// Get a channel&#39;s boards, grouped into different categories</span>
+    <span class="attribute">#[<span class="ident">tracing</span>::<span class="ident">instrument</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_channel_grouped_boards</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">GroupedBoards</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">endpoints</span>::<span class="ident">grouped_boards_url</span>(<span class="kw-2">&amp;</span><span class="ident">channel_code</span>))
             .<span class="ident">header</span>(
@@ -388,6 +409,7 @@
 
     <span class="doccomment">/// Gets a channel&#39;s board info. Note that this doesn&#39;t include the actual board posts</span>
     <span class="doccomment">/// Channel code is required since the referer requires the channel board URL</span>
+    <span class="attribute">#[<span class="ident">tracing</span>::<span class="ident">instrument</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_channel_board</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">board_id</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Board</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">endpoints</span>::<span class="ident">board_url</span>(<span class="ident">board_id</span>))
             .<span class="ident">header</span>(
@@ -405,6 +427,7 @@
     }
 
     <span class="doccomment">/// Get the posts in a given board</span>
+    <span class="attribute">#[<span class="ident">tracing</span>::<span class="ident">instrument</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_board_posts</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">channel_code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">board_id</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BoardPosts</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">endpoints</span>::<span class="ident">board_posts_url</span>(<span class="ident">board_id</span>))
             .<span class="ident">header</span>(
@@ -421,6 +444,7 @@
             .<span class="ident">map_err</span>(<span class="ident">From</span>::<span class="ident">from</span>)
     }
 
+    <span class="attribute">#[<span class="ident">tracing</span>::<span class="ident">instrument</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_channel_video_list</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">channel_seq</span>: <span class="ident">u32</span>,
@@ -442,6 +466,7 @@
             .<span class="ident">map_err</span>(<span class="ident">From</span>::<span class="ident">from</span>)
     }
 
+    <span class="attribute">#[<span class="ident">tracing</span>::<span class="ident">instrument</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_upcoming_video_list</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">channel_seq</span>: <span class="ident">u32</span>,
@@ -464,6 +489,7 @@
     }
 
     <span class="doccomment">/// Fetches new videos from any channel (equivalent to the new section on the homepage)</span>
+    <span class="attribute">#[<span class="ident">tracing</span>::<span class="ident">instrument</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_recent_videos</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">page_size</span>: <span class="ident">u64</span>, <span class="ident">page_no</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">RecentVideo</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">get</span>(<span class="string">&quot;https://www.vlive.tv/home/video/more&quot;</span>)
             .<span class="ident">query</span>(<span class="kw-2">&amp;</span>[
@@ -478,6 +504,7 @@
             .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">text</span><span class="op">|</span> <span class="ident">RecentVideo</span>::<span class="ident">from_html</span>(<span class="kw-2">&amp;</span><span class="ident">text</span>))
     }
 
+    <span class="attribute">#[<span class="ident">tracing</span>::<span class="ident">instrument</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_video</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">video_seq</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">video</span>::<span class="ident">VideoState</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">video_url</span> <span class="op">=</span> <span class="ident">endpoints</span>::<span class="ident">video_url</span>(<span class="ident">video_seq</span>);
         <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">video_url</span>).<span class="ident">send</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">text</span>().<span class="kw">await</span><span class="question-mark">?</span>;
@@ -486,9 +513,13 @@
     }
 
     <span class="doccomment">/// Get detailed information about a given video</span>
+    <span class="attribute">#[<span class="ident">tracing</span>::<span class="ident">instrument</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_video_streams</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">video_seq</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">video</span>::<span class="ident">Video</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">video_url</span> <span class="op">=</span> <span class="ident">endpoints</span>::<span class="ident">video_url</span>(<span class="ident">video_seq</span>);
+        <span class="ident">tracing</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;video_url: {}&quot;</span>, <span class="ident">video_url</span>);
         <span class="kw">let</span> <span class="ident">video_state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_video</span>(<span class="ident">video_seq</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+
+        <span class="ident">tracing</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;video_state: {:?}&quot;</span>, <span class="ident">video_state</span>);
 
         <span class="kw">let</span> <span class="ident">video_id</span> <span class="op">=</span> <span class="ident">video_state</span>
             .<span class="ident">post_detail</span>
@@ -498,7 +529,8 @@
             .<span class="ident">vod_id</span>
             .<span class="ident">as_ref</span>()
             .<span class="ident">ok_or</span>(<span class="ident">Error</span>::<span class="ident">IsLive</span>)<span class="question-mark">?</span>;
-        <span class="comment">// let video_id = video_state.post_detail.error.data.official_video.vod_id.as_ref();</span>
+
+        <span class="ident">tracing</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;video_id: {}&quot;</span>, <span class="ident">video_id</span>);
 
         <span class="kw">let</span> <span class="ident">video_key</span> <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">endpoints</span>::<span class="ident">inkey_url</span>(<span class="ident">video_seq</span>))
@@ -509,6 +541,8 @@
             .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">json</span>::<span class="op">&lt;</span><span class="ident">video</span>::<span class="ident">VideoKey</span><span class="op">&gt;</span>()
             .<span class="kw">await</span><span class="question-mark">?</span>;
+
+        <span class="ident">tracing</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;video_key: {:?}&quot;</span>, <span class="ident">video_key</span>);
 
         <span class="self">self</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">endpoints</span>::<span class="ident">vod_url</span>(<span class="kw-2">&amp;</span><span class="ident">video_id</span>, <span class="kw-2">&amp;</span><span class="ident">video_key</span>.<span class="ident">inkey</span>))
             .<span class="ident">send</span>()
@@ -541,4 +575,5 @@
     <span class="prelude-val">Ok</span>(<span class="ident">state</span>)
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "vlive";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="vlive"></div>
+    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
