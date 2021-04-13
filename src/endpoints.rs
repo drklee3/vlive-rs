@@ -33,7 +33,7 @@ pub fn video_url(video_seq: u64) -> String {
 
 pub fn inkey_url(video_seq: u64) -> String {
     format!(
-        "https://www.vlive.tv/globalv-web/vam-web/video/v1.0/vod/{}/inkey?appId={}",
+        "https://www.vlive.tv/globalv-web/vam-web/video/v1.0/vod/{}/inkey?appId={}&platformType=PC&gcc=US&locale=en_US",
         video_seq, APP_ID
     )
 }

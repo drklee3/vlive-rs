@@ -68,6 +68,7 @@ pub trait VLiveRequester {
 #[async_trait]
 impl VLiveRequester for Client {
     /// Search for a channel by name
+    #[tracing::instrument]
     async fn search_channel(&self, query: &str, num_rows: u64) -> Result<channel::ChannelList> {
         self.get("http://www.vlive.tv/search/auto/channels")
             .query(&[("query", query), ("maxNumOfRows", &num_rows.to_string())])
@@ -79,6 +80,7 @@ impl VLiveRequester for Client {
     }
 
     /// Get basic information about a channel
+    #[tracing::instrument]
     async fn get_channel_info(&self, channel_code: &str) -> Result<channel::Channel> {
         let channel_url = endpoints::channel_url(channel_code);
         let response = self.get(&channel_url).send().await?.text().await?;
@@ -88,6 +90,7 @@ impl VLiveRequester for Client {
         Ok(s.channel.channel)
     }
 
+    #[tracing::instrument]
     async fn decode_channel_code(&self, channel_code: &str) -> Result<u64> {
         self.get(api!("decodeChannelCode"))
             .query(&[("app_id", APP_ID), ("channelCode", &channel_code)])
@@ -100,6 +103,7 @@ impl VLiveRequester for Client {
     }
 
     /// Get a channel's boards, grouped into different categories
+    #[tracing::instrument]
     async fn get_channel_grouped_boards(&self, channel_code: &str) -> Result<GroupedBoards> {
         self.get(&endpoints::grouped_boards_url(&channel_code))
             .header(
@@ -115,6 +119,7 @@ impl VLiveRequester for Client {
 
     /// Gets a channel's board info. Note that this doesn't include the actual board posts
     /// Channel code is required since the referer requires the channel board URL
+    #[tracing::instrument]
     async fn get_channel_board(&self, channel_code: &str, board_id: u64) -> Result<Board> {
         self.get(&endpoints::board_url(board_id))
             .header(
@@ -132,6 +137,7 @@ impl VLiveRequester for Client {
     }
 
     /// Get the posts in a given board
+    #[tracing::instrument]
     async fn get_board_posts(&self, channel_code: &str, board_id: u64) -> Result<BoardPosts> {
         self.get(&endpoints::board_posts_url(board_id))
             .header(
@@ -148,6 +154,7 @@ impl VLiveRequester for Client {
             .map_err(From::from)
     }
 
+    #[tracing::instrument]
     async fn get_channel_video_list(
         &self,
         channel_seq: u32,
@@ -169,6 +176,7 @@ impl VLiveRequester for Client {
             .map_err(From::from)
     }
 
+    #[tracing::instrument]
     async fn get_upcoming_video_list(
         &self,
         channel_seq: u32,
@@ -191,6 +199,7 @@ impl VLiveRequester for Client {
     }
 
     /// Fetches new videos from any channel (equivalent to the new section on the homepage)
+    #[tracing::instrument]
     async fn get_recent_videos(&self, page_size: u64, page_no: u64) -> Result<Vec<RecentVideo>> {
         self.get("https://www.vlive.tv/home/video/more")
             .query(&[
@@ -205,6 +214,7 @@ impl VLiveRequester for Client {
             .and_then(|text| RecentVideo::from_html(&text))
     }
 
+    #[tracing::instrument]
     async fn get_video(&self, video_seq: u64) -> Result<video::VideoState> {
         let video_url = endpoints::video_url(video_seq);
         let response = self.get(&video_url).send().await?.text().await?;
@@ -213,9 +223,13 @@ impl VLiveRequester for Client {
     }
 
     /// Get detailed information about a given video
+    #[tracing::instrument]
     async fn get_video_streams(&self, video_seq: u64) -> Result<video::Video> {
         let video_url = endpoints::video_url(video_seq);
+        tracing::debug!("video_url: {}", video_url);
         let video_state = self.get_video(video_seq).await?;
+
+        tracing::debug!("video_state: {:?}", video_state);
 
         let video_id = video_state
             .post_detail
@@ -225,7 +239,8 @@ impl VLiveRequester for Client {
             .vod_id
             .as_ref()
             .ok_or(Error::IsLive)?;
-        // let video_id = video_state.post_detail.error.data.official_video.vod_id.as_ref();
+
+        tracing::debug!("video_id: {}", video_id);
 
         let video_key = self
             .get(&endpoints::inkey_url(video_seq))
@@ -236,6 +251,8 @@ impl VLiveRequester for Client {
             .await?
             .json::<video::VideoKey>()
             .await?;
+
+        tracing::debug!("video_key: {:?}", video_key);
 
         self.get(&endpoints::vod_url(&video_id, &video_key.inkey))
             .send()
