@@ -2,13 +2,13 @@ use crate::model::helpers::*;
 use chrono::{offset::FixedOffset, DateTime};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ChannelWrapper {
     pub channel: Channel,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Channel {
     pub channel_code: String,
@@ -39,7 +39,7 @@ impl Channel {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct PartialChannel {
     pub channel_code: String,
@@ -47,7 +47,7 @@ pub struct PartialChannel {
 }
 
 /// Type of channel, basic or CHANNEL+
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum ChannelType {
     /// Regular channels
     BASIC,
@@ -56,11 +56,11 @@ pub enum ChannelType {
 }
 
 /// List of all channels on VLive
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ChannelList(pub Vec<ChannelListItem>);
 
 /// Channel Item return in list of all available channels
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ChannelListItem {
     /// Name of channel
     pub name: String, // "BTS",
@@ -75,7 +75,7 @@ pub struct ChannelListItem {
 }
 
 // https://www.vlive.tv/globalv-web/vam-web/vhs/store/v1.0/channels/{}
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ChannelBasicInfo {
     pub profile_img: String,
@@ -85,7 +85,7 @@ pub struct ChannelBasicInfo {
 }
 
 /// Information on a channel
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ChannelInfo {
     /// Channel ID, used in API queries.
@@ -134,7 +134,7 @@ impl ChannelInfo {
     }
 }
 /// Information on a video
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct VideoListItem {
     /// The ID of the video, used in the URL.
@@ -207,7 +207,7 @@ impl VideoListItem {
 }
 
 /// Upcoming videos for a channel
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ChannelUpcomingVideoList {
     /// Total count of upcoming videos.
@@ -217,13 +217,13 @@ pub struct ChannelUpcomingVideoList {
 }
 
 /// Wrapper for upcoming video list.
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub(crate) struct ChannelUpcomingVideoListResult {
     pub result: ChannelUpcomingVideoList,
 }
 
 /// A list of a channel's videos
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ChannelVideoList {
     /// Information about this channel
@@ -235,13 +235,13 @@ pub struct ChannelVideoList {
 }
 
 /// Wrapper for channel video list.
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub(crate) struct ChannelVideoListResult {
     pub result: ChannelVideoList,
 }
 
 /// Decoded channel code to channel seq
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct DecodeChannelCode {
     pub channel_seq: u64,
@@ -249,7 +249,7 @@ pub struct DecodeChannelCode {
 }
 
 /// Wrapper for decoded channel code
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub(crate) struct DecodeChannelCodeResult {
     pub result: DecodeChannelCode,
 }

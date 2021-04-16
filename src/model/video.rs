@@ -198,14 +198,14 @@ pub struct LiveStreamInfo {
     pub resolutions: Vec<LiveStreamResolution>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct VideoKey {
     pub inkey: String,
     // adParams field ignored
 }
 
 #[serde(rename_all = "camelCase")]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct VideoState {
     pub post_detail: Post,
     pub channel: channel::ChannelWrapper,
@@ -217,7 +217,7 @@ impl VideoState {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(untagged)]
 pub enum Post {
     /// Error if this is a paid video. This still contains video information.
@@ -241,13 +241,13 @@ impl Post {
 }
 
 // These wrappers are just for debugging since using an untagged enum hides useful error messages
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct PostDetailErrorWrapper {
     pub error: PostDetailError,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct PostDetailError {
     pub error_code: String,
@@ -255,7 +255,7 @@ pub struct PostDetailError {
     pub data: Option<PostDetail>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PostWrapper {
     pub post: Option<PostDetail>,
 }
@@ -266,7 +266,7 @@ impl PostWrapper {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct PostDetail {
     pub post_id: String,
@@ -291,7 +291,7 @@ pub struct PostDetail {
 }
 
 /// Post details in a related video
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct PartialPostDetail {
     pub post_id: String,
@@ -299,7 +299,7 @@ pub struct PartialPostDetail {
     pub board: BoardInfo,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct BoardInfo {
     pub board_id: i64,
@@ -307,14 +307,14 @@ pub struct BoardInfo {
     pub pay_required: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Attachments {
     pub video_count: i64,
     pub photo_count: i64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Author {
     pub member_id: String,
@@ -325,7 +325,7 @@ pub struct Author {
     pub official_profile_type: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct OfficialVideo {
     pub video_seq: i64,
@@ -377,7 +377,7 @@ pub struct OfficialVideo {
     pub vod_secure_status: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct LightStick {
     pub stick_seq: i64,
@@ -388,7 +388,7 @@ pub struct LightStick {
     pub image: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct MultinationalTitle {
     #[serde(rename = "type")]
